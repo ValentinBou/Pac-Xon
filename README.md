@@ -5,7 +5,7 @@ MVC
 Objet ennemi avec des sous-classes pour chaque type d'ennemie
 Position taille
 
-** Terrain : ** cinq blocs différents :
+Terrain : cinq blocs différents :
 - Bordure (indestructible)
 - Rien dessus
 - En cours de création (Pac-Man vient de passer dessus)
