@@ -1,0 +1,6 @@
+<TextureAtlas imagePath="blocsUnicolor.png">
+	<SubTexture name="blocsUnicolor_bordure.png" x="0" y="0" width="16" height="16"/>
+	<SubTexture name="blocsUnicolor_vide.png" x="16" y="0" width="16" height="16"/>
+	<SubTexture name="blocsUnicolor_monstre.png" x="32" y="0" width="16" height="16"/>
+	<SubTexture name="blocsUnicolor_heros.png" x="48" y="0" width="16" height="16"/>
+</TextureAtlas>

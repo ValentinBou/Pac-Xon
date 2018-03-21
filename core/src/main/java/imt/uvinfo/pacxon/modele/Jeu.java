@@ -24,8 +24,8 @@ public class Jeu {
 	private void creerNiveaux() {
 		/* TODO : possibilité d'utiliser un fichier de configuration ici */
 		ArrayList<Personnage> monstres = new ArrayList<Personnage>();
-		int defX = 20;
-		int defY = 10;
+		int defX = 40;
+		int defY = 30;
 		double defPourcentObjectif = 0.8;
 		
 		monstres.add(new MonstreNormal(this));
@@ -40,6 +40,8 @@ public class Jeu {
 		monstres.add(new MonstreNormal(this));
 		listeNiveaux.add(new Niveau(3, defX, defY, new Heros(this), monstres, defPourcentObjectif));
 		monstres.clear();
+		
+		listeNiveaux.get(0).initier();
 	}
 	
 	public int getScore() {
@@ -76,5 +78,6 @@ public class Jeu {
 	
 	public void passerNiveau() {
 		curseurNiveauActuel++;
+		getNiveauActuel().initier();
 	}
 }

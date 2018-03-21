@@ -21,16 +21,17 @@ public class Heros extends Personnage {
 		
 		directionX = vitesse;
 		directionY = 0.0;
-
-		goToPlaceDepart();
+		
+		posX = 0.0;
+		posY = 0.0;
 	}
-	
-	private void goToPlaceDepart() {
+
+	protected void initier() {
 		int largeurNiveau = this.jeu.getNiveauActuel().getTerrain().getLargeur();
 		int hauteurNiveau = this.jeu.getNiveauActuel().getTerrain().getHauteur();
 		
-		posX = (coordonneeSpawnX + largeurNiveau) % largeurNiveau;
-		posY = (coordonneeSpawnY + hauteurNiveau) % hauteurNiveau;
+		posX = (double) ((coordonneeSpawnX + largeurNiveau) % largeurNiveau) / largeurNiveau;
+		posY = (double) ((coordonneeSpawnY + hauteurNiveau) % hauteurNiveau) / hauteurNiveau;
 	}
 	
 	public void remplirTracage() {

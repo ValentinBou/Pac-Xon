@@ -16,9 +16,10 @@ public class Niveau {
 	private int nbBlocsTotal;
 	
 	public Niveau(int num, int x, int y, Heros heros, ArrayList<Personnage> monstres, double pourcentObjectif) {
-		int i = 0;
-		
+	
 		this.heros = heros;
+		
+		personnages = new ArrayList<Personnage>();
 		
 		while(monstres.size() > 0) {
 			personnages.add(monstres.remove(0));
@@ -30,6 +31,14 @@ public class Niveau {
 		terrain = new STUB_Terrain(x, y);
 
 	}
+	
+	protected void initier() {
+		int i = 0;
+		heros.initier();
+		for(i = 0; i < personnages.size(); i++) {
+			personnages.get(i).initier();
+		}
+	}
 
 	public STUB_Terrain getTerrain() {
 		return terrain;
@@ -37,6 +46,14 @@ public class Niveau {
 
 	public Personnage getHeros() {
 		return heros;
+	}
+	
+	public Personnage getPersonnage(int i) {
+		return personnages.get(i);
+	}
+	
+	public int getNbPersonnages() {
+		return personnages.size();
 	}
 
 	public double getPourcentageObjectif() {

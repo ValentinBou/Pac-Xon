@@ -84,6 +84,7 @@ public abstract class Personnage {
 		}
 	}
 	
+	abstract void initier();
 	
 	
 }
