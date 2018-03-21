@@ -1,0 +1,4 @@
+repositories { jcenter() }
+dependencies {
+    compile group: 'javax.xml.bind', name: 'jaxb-api', version: '2.2.12'
+}

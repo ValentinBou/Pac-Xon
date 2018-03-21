@@ -1,0 +1,45 @@
+allprojects {
+    version = '1.0'
+
+    ext {
+        appName = 'PacXon'
+        gdxVersion = '1.9.8'
+    }
+
+    apply plugin: 'java'
+    repositories { jcenter() }
+
+    compileJava {
+        options.compilerArgs += ["-Xlint:unchecked"]
+    }
+
+    apply plugin: 'idea'
+    idea.module {
+        downloadJavadoc = true
+        downloadSources = true
+    }
+}
+
+task atlases(type: JavaExec) {
+    classpath file("${rootDir}/buildSrc/build/classes/main")
+    main = 'de.nxg.kenneytolibgdxatlas.KenneyToLibGdxAtlasConverter'
+    args 'core/src/main/resources'
+}
+
+project(':core') {
+    dependencies {
+        compile group: 'com.badlogicgames.gdx', name: 'gdx', version: rootProject.gdxVersion
+    }
+}
+
+project(':desktop') {
+    dependencies {
+        compile project(':core')
+        compile group: 'com.badlogicgames.gdx', name: 'gdx-backend-lwjgl', version: rootProject.gdxVersion
+        compile group: 'com.badlogicgames.gdx', name: 'gdx-platform', version: rootProject.gdxVersion, classifier: 'natives-desktop'
+    }
+
+    apply plugin: 'application'
+    mainClassName = 'imt.uvinfo.pacxon.desktop.PacXonDesktop'
+    run.dependsOn atlases
+}
