@@ -10,6 +10,8 @@ public class Jeu {
 	private int curseurNiveauActuel = 0;
 	private ArrayList<Niveau> listeNiveaux;
 	
+	
+	
 	public Jeu(int nbVies) {
 		nbViesTotal = nbVies;
 		nbViesRestantes = nbVies;
@@ -24,19 +26,19 @@ public class Jeu {
 		ArrayList<Personnage> monstres = new ArrayList<Personnage>();
 		int defX = 20;
 		int defY = 10;
-		float defPourcentObjectif = (float) 0.8;
+		double defPourcentObjectif = 0.8;
 		
-		monstres.add(new MonstreNormal());
-		listeNiveaux.add(new Niveau(1, defX, defY, monstres, defPourcentObjectif));
+		monstres.add(new MonstreNormal(this));
+		listeNiveaux.add(new Niveau(1, defX, defY, new Heros(this), monstres, defPourcentObjectif));
 		monstres.clear();
-		monstres.add(new MonstreNormal());
-		monstres.add(new MonstreNormal());
-		listeNiveaux.add(new Niveau(2, defX, defY, monstres, defPourcentObjectif));
+		monstres.add(new MonstreNormal(this));
+		monstres.add(new MonstreNormal(this));
+		listeNiveaux.add(new Niveau(2, defX, defY, new Heros(this), monstres, defPourcentObjectif));
 		monstres.clear();
-		monstres.add(new MonstreNormal());
-		monstres.add(new MonstreNormal());
-		monstres.add(new MonstreNormal());
-		listeNiveaux.add(new Niveau(3, defX, defY, monstres, defPourcentObjectif));
+		monstres.add(new MonstreNormal(this));
+		monstres.add(new MonstreNormal(this));
+		monstres.add(new MonstreNormal(this));
+		listeNiveaux.add(new Niveau(3, defX, defY, new Heros(this), monstres, defPourcentObjectif));
 		monstres.clear();
 	}
 	

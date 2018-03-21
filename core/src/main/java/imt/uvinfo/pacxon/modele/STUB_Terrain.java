@@ -6,4 +6,11 @@ public class STUB_Terrain {
 		
 	}
 	
+	public int getLargeur() {
+		return 600;
+	}
+	
+	public int getHauteur() {
+		return 400;
+	}
 }
