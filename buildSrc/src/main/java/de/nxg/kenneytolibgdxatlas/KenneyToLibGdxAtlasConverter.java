@@ -92,8 +92,8 @@ public class KenneyToLibGdxAtlasConverter implements Runnable {
 
         String fileName = file.getFileName().toString();
         Path newPath = file.getParent().resolve(fileName.substring(0, fileName.length() - 4) + ".atlas");
-        //Files.write(newPath, sb.toString().getBytes(), StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
-        Files.write(newPath, sb.toString().getBytes(), StandardOpenOption.CREATE_NEW);
+        Files.write(newPath, sb.toString().getBytes(), StandardOpenOption.WRITE, StandardOpenOption.TRUNCATE_EXISTING);
+        //Files.write(newPath, sb.toString().getBytes(), StandardOpenOption.CREATE_NEW);
 
         System.out.println("done [" + newPath.toString() + "]");
     }
