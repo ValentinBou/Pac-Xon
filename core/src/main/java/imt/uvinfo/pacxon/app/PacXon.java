@@ -15,6 +15,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
+import imt.uvinfo.pacxon.modele.Heros;
 import imt.uvinfo.pacxon.modele.Jeu;
 import imt.uvinfo.pacxon.modele.Niveau;
 import imt.uvinfo.pacxon.modele.TypeBloc;
@@ -90,28 +91,30 @@ public class PacXon implements ApplicationListener {
         
         Niveau niveauActuel = monJeu.getNiveauActuel();
         
+        Heros heros = monJeu.getNiveauActuel().getHeros();
+        
         if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-        	niveauActuel.getHeros().setFlagArrowRight();
+        	heros.setFlagArrowRight();
         } else {
-        	niveauActuel.getHeros().unSetFlagArrowRight();
+        	heros.unSetFlagArrowRight();
         }
         
         if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
-        	niveauActuel.getHeros().setFlagArrowUp();
+        	heros.setFlagArrowUp();
         } else {
-        	niveauActuel.getHeros().unSetFlagArrowUp();
+        	heros.unSetFlagArrowUp();
         }
         
         if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-        	niveauActuel.getHeros().setFlagArrowLeft();
+        	heros.setFlagArrowLeft();
         } else {
-        	niveauActuel.getHeros().unSetFlagArrowLeft();
+        	heros.unSetFlagArrowLeft();
         }
         
         if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-        	niveauActuel.getHeros().setFlagArrowDown();
+        	heros.setFlagArrowDown();
         } else {
-        	niveauActuel.getHeros().unSetFlagArrowDown();
+        	heros.unSetFlagArrowDown();
         }
 
         int i = 0;
@@ -131,28 +134,48 @@ public class PacXon implements ApplicationListener {
 
         sprites.setProjectionMatrix(viewport.getCamera().combined);
         sprites.begin();
+        TypeBloc tmpBloc = null;
         for(i = 0; i < totalLargeur; i++) {
         	for(j = 0; j < totalHauteur; j++) {
-        		if(niveauActuel.getTerrain().getBloc(i, j) == TypeBloc.Bordure) {
+            	tmpBloc = niveauActuel.getTerrain().getBloc(i, j);
+        		if(tmpBloc == TypeBloc.Bordure) {
         			sprites.draw(textures.findRegion("blocsUnicolor_bordure"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
-        		} else {
+        		} else if(tmpBloc == TypeBloc.BlocNormal) {
+        			sprites.draw(textures.findRegion("blocsUnicolor_blocnormal"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
+        		} else if(tmpBloc == TypeBloc.Vide){
         			sprites.draw(textures.findRegion("blocsUnicolor_vide"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
+        		} else if(tmpBloc == TypeBloc.Trace){
+        			sprites.draw(textures.findRegion("blocsUnicolor_trace"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
+        		} else if(tmpBloc == TypeBloc.TraceTouche){
+        			sprites.draw(textures.findRegion("blocsUnicolor_tracetouche"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
+        		} else {
+        			sprites.draw(textures.findRegion("blocsUnicolor_none"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
         		}
         		
         	}
         	
         }
-        sprites.draw(textures.findRegion("blocsUnicolor_heros"), (int)(niveauActuel.getHeros().getPosX()*800), (int)(niveauActuel.getHeros().getPosY()*600), unitLargeur, unitHauteur);
         
-        for(i = 0; i < niveauActuel.getNbPersonnages(); i++) {
-        	sprites.draw(textures.findRegion("blocsUnicolor_monstre"), (int)(niveauActuel.getPersonnage(i).getPosX()*800), (int)(niveauActuel.getPersonnage(i).getPosY()*600), niveauActuel.getPersonnage(i).getLargeur()*unitLargeur, niveauActuel.getPersonnage(i).getHauteur()*unitHauteur);
+        if(heros.getDirectionY() > 0.0) {
+        	sprites.draw(textures.findRegion("blocsUnicolor_heros_up"), (int)(heros.getPosX()*800), (int)(heros.getPosY()*600), unitLargeur, unitHauteur);
+        } else if(heros.getDirectionY() < 0.0) {
+        	sprites.draw(textures.findRegion("blocsUnicolor_heros_down"), (int)(heros.getPosX()*800), (int)(heros.getPosY()*600), unitLargeur, unitHauteur);
+        } else if(heros.getDirectionX() < 0.0) {
+        	sprites.draw(textures.findRegion("blocsUnicolor_heros_left"), (int)(heros.getPosX()*800), (int)(heros.getPosY()*600), unitLargeur, unitHauteur);
+        } else {
+        	sprites.draw(textures.findRegion("blocsUnicolor_heros_right"), (int)(heros.getPosX()*800), (int)(heros.getPosY()*600), unitLargeur, unitHauteur);
         }
         
-        //sprites.draw(textures.findRegion("blocsUnicolor_bordure"), 0, 0, unitLargeur, unitHauteur);
-        sprites.end();
         
-    	//draw(Texture texture, float x, float y, float width, float height)
-    	//Draws a rectangle with the bottom left corner at x,y and stretching the region to cover the given width and height.
+        for(i = 0; i < niveauActuel.getNbPersonnages(); i++) {
+        	if(niveauActuel.getPersonnage(i).getDirectionX() < 0.0) {
+            	sprites.draw(textures.findRegion("blocsUnicolor_monstre_left"), (int)(niveauActuel.getPersonnage(i).getPosX()*800), (int)(niveauActuel.getPersonnage(i).getPosY()*600), niveauActuel.getPersonnage(i).getLargeur()*unitLargeur, niveauActuel.getPersonnage(i).getHauteur()*unitHauteur);
+        	} else {
+            	sprites.draw(textures.findRegion("blocsUnicolor_monstre_right"), (int)(niveauActuel.getPersonnage(i).getPosX()*800), (int)(niveauActuel.getPersonnage(i).getPosY()*600), niveauActuel.getPersonnage(i).getLargeur()*unitLargeur, niveauActuel.getPersonnage(i).getHauteur()*unitHauteur);
+        	}
+        }
+
+        sprites.end();
         
         /* On pet à jour le niveau, la màj s'affichera à la frame suivante */
         niveauActuel.update(Gdx.graphics.getDeltaTime());

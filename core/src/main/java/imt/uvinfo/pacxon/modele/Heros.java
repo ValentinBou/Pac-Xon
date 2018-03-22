@@ -209,7 +209,7 @@ public class Heros extends Personnage {
 			if((terrain.getXint(blocActuelX) != terrain.getXint(precedentX)) || (terrain.getYint(blocActuelY) != terrain.getYint(precedentY))) {
 				TypeBloc blocPrecedent = terrain.getBloc(precedentX, precedentY);
 				if (blocPrecedent == TypeBloc.Vide) {
-					terrain.setBloc(TypeBloc.Bordure, precedentX, precedentY); // TODO : Type de bloc temporaire pour test rapide
+					terrain.setBloc(TypeBloc.Trace, precedentX, precedentY); // TODO : Type de bloc temporaire pour test rapide
 				}
 				
 				TypeBloc blocActuel = terrain.getBloc(blocActuelX, blocActuelY);

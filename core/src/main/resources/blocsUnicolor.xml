@@ -1,6 +1,14 @@
 <TextureAtlas imagePath="blocsUnicolor.png">
 	<SubTexture name="blocsUnicolor_bordure.png" x="0" y="0" width="16" height="16"/>
-	<SubTexture name="blocsUnicolor_vide.png" x="16" y="0" width="16" height="16"/>
-	<SubTexture name="blocsUnicolor_monstre.png" x="32" y="0" width="16" height="16"/>
-	<SubTexture name="blocsUnicolor_heros.png" x="48" y="0" width="16" height="16"/>
+	<SubTexture name="blocsUnicolor_blocnormal.png" x="16" y="0" width="16" height="16"/>
+	<SubTexture name="blocsUnicolor_vide.png" x="32" y="0" width="16" height="16"/>
+	<SubTexture name="blocsUnicolor_none.png" x="48" y="0" width="16" height="16"/>
+	<SubTexture name="blocsUnicolor_trace.png" x="0" y="16" width="16" height="16"/>
+	<SubTexture name="blocsUnicolor_tracetouche.png" x="16" y="16" width="16" height="16"/>
+	<SubTexture name="blocsUnicolor_heros_right.png" x="0" y="32" width="16" height="16"/>
+	<SubTexture name="blocsUnicolor_heros_left.png" x="16" y="32" width="16" height="16"/>
+	<SubTexture name="blocsUnicolor_heros_up.png" x="32" y="32" width="16" height="16"/>
+	<SubTexture name="blocsUnicolor_heros_down.png" x="48" y="32" width="16" height="16"/>
+	<SubTexture name="blocsUnicolor_monstre_right.png" x="0" y="48" width="16" height="16"/>
+	<SubTexture name="blocsUnicolor_monstre_left.png" x="16" y="48" width="16" height="16"/>
 </TextureAtlas>
