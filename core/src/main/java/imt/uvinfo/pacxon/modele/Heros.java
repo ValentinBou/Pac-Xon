@@ -43,46 +43,48 @@ public class Heros extends Personnage {
 	public void update(float elapsedTime) {
 		int largeurNiveau = this.jeu.getNiveauActuel().getTerrain().getLargeur();
 		int hauteurNiveau = this.jeu.getNiveauActuel().getTerrain().getHauteur();
-		double maxPosX = 1.0 - 1.0 / largeurNiveau;
-		double maxPosY = 1.0 - 1.0 / hauteurNiveau;
+		double largeurUniteBloc = 1.0 / largeurNiveau;
+		double hauteurUniteBloc = 1.0 / hauteurNiveau;
+		double maxPosX = 1.0 - ((double)largeur / largeurNiveau);
+		double maxPosY = 1.0 - ((double)hauteur / hauteurNiveau);
 		
 		if(!isTracing) {
 			if(FLAG_KEY_PRESSED_ARROW_RIGHT) {
 				/* Changement de direction */
 				if(directionX <= 0.0) {
-					posX = (double) ((int) (posX * largeurNiveau + 0.5)) / largeurNiveau;
-					posY = (double) ((int) (posY * hauteurNiveau + 0.5)) / hauteurNiveau;
+					posX = (double) (Math.round(posX * largeurNiveau)) / largeurNiveau;
+					posY = (double) (Math.round(posY * hauteurNiveau)) / hauteurNiveau;
 				}
 				directionX = vitesse;
 				directionY = 0.0;
 			} else if(FLAG_KEY_PRESSED_ARROW_UP) {
 				/* Changement de direction */
 				if(directionY <= 0.0) {
-					posX = (double) ((int) (posX * largeurNiveau + 0.5)) / largeurNiveau;
-					posY = (double) ((int) (posY * hauteurNiveau + 0.5)) / hauteurNiveau;
+					posX = (double) (Math.round(posX * largeurNiveau)) / largeurNiveau;
+					posY = (double) (Math.round(posY * hauteurNiveau)) / hauteurNiveau;
 				}
 				directionX = 0.0;
 				directionY = vitesse;
 			} else if(FLAG_KEY_PRESSED_ARROW_LEFT) {
 				/* Changement de direction */
 				if(directionX >= 0.0) {
-					posX = (double) ((int) (posX * largeurNiveau + 0.5)) / largeurNiveau;
-					posY = (double) ((int) (posY * hauteurNiveau + 0.5)) / hauteurNiveau;
+					posX = (double) (Math.round(posX * largeurNiveau)) / largeurNiveau;
+					posY = (double) (Math.round(posY * hauteurNiveau)) / hauteurNiveau;
 				}
 				directionX = -vitesse;
 				directionY = 0.0;
 			} else if(FLAG_KEY_PRESSED_ARROW_DOWN) {
 				/* Changement de direction */
 				if(directionY >= 0.0) {
-					posX = (double) ((int) (posX * largeurNiveau + 0.5)) / largeurNiveau;
-					posY = (double) ((int) (posY * hauteurNiveau + 0.5)) / hauteurNiveau;
+					posX = (double) (Math.round(posX * largeurNiveau)) / largeurNiveau;
+					posY = (double) (Math.round(posY * hauteurNiveau)) / hauteurNiveau;
 				}
 				directionX = 0.0;
 				directionY = -vitesse;
 			} else {
 				if(directionX != 0.0 || directionY != 0.0) {
-					posX = (double) ((int) (posX * largeurNiveau + 0.5)) / largeurNiveau;
-					posY = (double) ((int) (posY * hauteurNiveau + 0.5)) / hauteurNiveau;
+					posX = (double) (Math.round(posX * largeurNiveau)) / largeurNiveau;
+					posY = (double) (Math.round(posY * hauteurNiveau)) / hauteurNiveau;
 				}
 				// Pas de touche appuyée, le héros de fait rien
 				directionX = 0.0;
@@ -91,43 +93,75 @@ public class Heros extends Personnage {
 		} else {
 			if(directionX != 0.0) {
 				if(FLAG_KEY_PRESSED_ARROW_UP) {
-					posX = (double) ((int) (posX * largeurNiveau + 0.5)) / largeurNiveau;
-					posY = (double) ((int) (posY * hauteurNiveau + 0.5)) / hauteurNiveau;
+					posX = (double) (Math.round(posX * largeurNiveau)) / largeurNiveau;
+					posY = (double) (Math.round(posY * hauteurNiveau)) / hauteurNiveau;
 					directionX = 0.0;
 					directionY = vitesse;
 				} else if(FLAG_KEY_PRESSED_ARROW_DOWN) {
-					posX = (double) ((int) (posX * largeurNiveau + 0.5)) / largeurNiveau;
-					posY = (double) ((int) (posY * hauteurNiveau + 0.5)) / hauteurNiveau;
+					posX = (double) (Math.round(posX * largeurNiveau)) / largeurNiveau;
+					posY = (double) (Math.round(posY * hauteurNiveau)) / hauteurNiveau;
 					directionX = 0.0;
 					directionY = -vitesse;
 				}
 			} else if(directionY != 0.0) {
 				if(FLAG_KEY_PRESSED_ARROW_RIGHT) {
-					posX = (double) ((int) (posX * largeurNiveau + 0.5)) / largeurNiveau;
-					posY = (double) ((int) (posY * hauteurNiveau + 0.5)) / hauteurNiveau;
+					posX = (double) (Math.round(posX * largeurNiveau)) / largeurNiveau;
+					posY = (double) (Math.round(posY * hauteurNiveau)) / hauteurNiveau;
 					directionX = vitesse;
 					directionY = 0.0;
 				} else if(FLAG_KEY_PRESSED_ARROW_LEFT) {
-					posX = (double) ((int) (posX * largeurNiveau + 0.5)) / largeurNiveau;
-					posY = (double) ((int) (posY * hauteurNiveau + 0.5)) / hauteurNiveau;
+					posX = (double) (Math.round(posX * largeurNiveau)) / largeurNiveau;
+					posY = (double) (Math.round(posY * hauteurNiveau)) / hauteurNiveau;
 					directionX = -vitesse;
 					directionY = 0.0;
 				}
 			}
 		}
 		
-		posX += directionX * elapsedTime;
+		/* Vérification du bloc suivant */
+		double blocSuivantX;
+		if(directionX > 0.0) {
+			blocSuivantX = ((posX + directionX * elapsedTime) + (largeur * largeurUniteBloc));
+		} else {
+			blocSuivantX = (posX + directionX * elapsedTime);
+		}
+		double blocSuivantY;
+		if(directionY > 0.0) {
+			blocSuivantY = ((posY + directionY * elapsedTime) + (hauteur * hauteurUniteBloc));
+		} else {
+			blocSuivantY = (posY + directionY * elapsedTime);
+		}
+		
+		
+		
+		if(blocSuivantX < 0.0) {
+			posX = 0.0;
+		} else if(blocSuivantX >= 1.0) {
+			posX = maxPosX;
+		} else {
+			posX += directionX * elapsedTime;
+		}
+
+		if(blocSuivantY < 0.0) {
+			posY = 0.0;
+		} else if(blocSuivantY >= 1.0) {
+			posY = maxPosY;
+		} else {
+			posY += directionY * elapsedTime;
+		}
+		
+		/*posX += directionX * elapsedTime;
 		if(posX > maxPosX) {
 			posX = maxPosX;
 		} else if(posX < 0.0) {
 			posX = 0.0;
-		}
-		posY += directionY * elapsedTime;
+		}*/
+		/*posY += directionY * elapsedTime;
 		if(posY > maxPosY) {
 			posY = maxPosY;
 		} else if(posY < 0.0) {
 			posY = 0.0;
-		}
+		}*/
 		
 		/* On gère l'entrée dans un nouveau bloc */
 	}

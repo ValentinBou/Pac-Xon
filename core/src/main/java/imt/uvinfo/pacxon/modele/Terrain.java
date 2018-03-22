@@ -40,7 +40,9 @@ public class Terrain {
 		return blocs[x][y];
 	}
 
-
+	public TypeBloc getBloc(double x, double y) {
+		return blocs[(int)(x * largeur)][(int)(y * hauteur)];
+	}
 
 
 
