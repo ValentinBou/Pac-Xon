@@ -4,25 +4,44 @@ import java.util.ArrayList;
 
 public class Terrain {
 
-	private int blocs;
+	private TypeBloc blocs[][];
 	private int largeur;
 	private int hauteur;
 	
-	// private iconesBlocs  icones;
-		
-	// Constructeur
 	public Terrain(int x, int y){
+		int i, j;
+		
+		blocs = new TypeBloc[x][y];
 		largeur = x;
 		hauteur = y;
-		blocs = largeur * hauteur;
-		// icones = 
+		
+		/* Génération des blocs */
+		/* TODO : Possibilité d'utiliser une "map" (un fichier de conf) */
+		for(i = 0; i < largeur; i++) {
+			for(j = 0; j < hauteur; j++) {
+				if((i == 0) || (j == 0) || (i == (largeur - 1)) || (j == (hauteur-1))) {
+					blocs[i][j] = TypeBloc.Bordure;
+				} else {
+					blocs[i][j] = TypeBloc.Vide;
+				}
+			}
+		}
+	}
+
+	public int getLargeur() {
+		return largeur;
 	}
 	
-	// Fonction
-	public String getIconeBloc(){
-		return TypeBloc;
+	public int getHauteur() {
+		return hauteur;
 	}
-	public TypeBloc getTypeBloc(int X, int Y){
-		return blocs = X * Y;
+	
+	public TypeBloc getBloc(int x, int y) {
+		return blocs[x][y];
 	}
+
+
+
+
+
 }

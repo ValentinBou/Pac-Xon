@@ -5,9 +5,9 @@ import java.util.ArrayList;
 public class Niveau {
 	
 	
-	private STUB_Terrain terrain;
+	private Terrain terrain;
 	
-	private Personnage heros;
+	private Heros heros;
 	private ArrayList<Personnage> personnages;
 	
 	private double pourcentageObjectif;
@@ -28,7 +28,7 @@ public class Niveau {
 		
 		pourcentageObjectif = pourcentObjectif;
 		nbBlocsTotal = x*y;
-		terrain = new STUB_Terrain(x, y);
+		terrain = new Terrain(x, y);
 
 	}
 	
@@ -39,12 +39,20 @@ public class Niveau {
 			personnages.get(i).initier();
 		}
 	}
+	
+	public void update(float elapsedTime) {
+		int i = 0;
+		heros.update(elapsedTime);
+		for(i = 0; i < personnages.size(); i++) {
+			personnages.get(i).update(elapsedTime);
+		}
+	}
 
-	public STUB_Terrain getTerrain() {
+	public Terrain getTerrain() {
 		return terrain;
 	}
 
-	public Personnage getHeros() {
+	public Heros getHeros() {
 		return heros;
 	}
 	

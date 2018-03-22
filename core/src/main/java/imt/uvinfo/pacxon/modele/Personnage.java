@@ -74,15 +74,7 @@ public abstract class Personnage {
 		return apparu;
 	}
 	
-	protected void update() {
-		if(isApparu()) {
-			
-		} else if(essayerDApparaitre()) {
-
-		} else {
-			
-		}
-	}
+	abstract void update(float elapsedTime);
 	
 	abstract void initier();
 	

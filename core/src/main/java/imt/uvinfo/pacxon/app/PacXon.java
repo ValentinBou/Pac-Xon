@@ -16,6 +16,8 @@ import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
 import imt.uvinfo.pacxon.modele.Jeu;
+import imt.uvinfo.pacxon.modele.Niveau;
+import imt.uvinfo.pacxon.modele.TypeBloc;
 
 public class PacXon implements ApplicationListener {
     private Viewport viewport;
@@ -85,11 +87,37 @@ public class PacXon implements ApplicationListener {
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
 
         elapsed += Gdx.graphics.getDeltaTime();
+        
+        Niveau niveauActuel = monJeu.getNiveauActuel();
+        
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        	niveauActuel.getHeros().setFlagArrowRight();
+        } else {
+        	niveauActuel.getHeros().unSetFlagArrowRight();
+        }
+        
+        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        	niveauActuel.getHeros().setFlagArrowUp();
+        } else {
+        	niveauActuel.getHeros().unSetFlagArrowUp();
+        }
+        
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        	niveauActuel.getHeros().setFlagArrowLeft();
+        } else {
+        	niveauActuel.getHeros().unSetFlagArrowLeft();
+        }
+        
+        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        	niveauActuel.getHeros().setFlagArrowDown();
+        } else {
+        	niveauActuel.getHeros().unSetFlagArrowDown();
+        }
 
         int i = 0;
         int j = 0;
-        int totalLargeur = monJeu.getNiveauActuel().getTerrain().getLargeur();
-        int totalHauteur = monJeu.getNiveauActuel().getTerrain().getHauteur();
+        int totalLargeur = niveauActuel.getTerrain().getLargeur();
+        int totalHauteur = niveauActuel.getTerrain().getHauteur();
     	int unitLargeur = 800/totalLargeur;
         int unitHauteur = 600/totalHauteur;
         
@@ -105,7 +133,7 @@ public class PacXon implements ApplicationListener {
         sprites.begin();
         for(i = 0; i < totalLargeur; i++) {
         	for(j = 0; j < totalHauteur; j++) {
-        		if(monJeu.getNiveauActuel().getTerrain().getBloc(i, j) == 1) {
+        		if(niveauActuel.getTerrain().getBloc(i, j) == TypeBloc.Bordure) {
         			sprites.draw(textures.findRegion("blocsUnicolor_bordure"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
         		} else {
         			sprites.draw(textures.findRegion("blocsUnicolor_vide"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
@@ -114,41 +142,21 @@ public class PacXon implements ApplicationListener {
         	}
         	
         }
-        sprites.draw(textures.findRegion("blocsUnicolor_heros"), (int)(monJeu.getNiveauActuel().getHeros().getPosX()*800), (int)(monJeu.getNiveauActuel().getHeros().getPosY()*600), unitLargeur, unitHauteur);
+        sprites.draw(textures.findRegion("blocsUnicolor_heros"), (int)(niveauActuel.getHeros().getPosX()*800), (int)(niveauActuel.getHeros().getPosY()*600), unitLargeur, unitHauteur);
         
-        for(i = 0; i < monJeu.getNiveauActuel().getNbPersonnages(); i++) {
-        	sprites.draw(textures.findRegion("blocsUnicolor_monstre"), (int)(monJeu.getNiveauActuel().getPersonnage(i).getPosX()*800), (int)(monJeu.getNiveauActuel().getPersonnage(i).getPosY()*600), unitLargeur, unitHauteur);
+        for(i = 0; i < niveauActuel.getNbPersonnages(); i++) {
+        	sprites.draw(textures.findRegion("blocsUnicolor_monstre"), (int)(niveauActuel.getPersonnage(i).getPosX()*800), (int)(niveauActuel.getPersonnage(i).getPosY()*600), unitLargeur, unitHauteur);
         }
         
         //sprites.draw(textures.findRegion("blocsUnicolor_bordure"), 0, 0, unitLargeur, unitHauteur);
         sprites.end();
         
-        
     	//draw(Texture texture, float x, float y, float width, float height)
     	//Draws a rectangle with the bottom left corner at x,y and stretching the region to cover the given width and height.
-    	
-    	/*
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
-
-        elapsed += Gdx.graphics.getDeltaTime();
-
-        Gdx.gl.glClearColor(0, 0.1f, 0.1f, 1);
-        Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
-
-        shapes.begin(ShapeRenderer.ShapeType.Line);
-        shapes.setColor(0, 0.5f, 1, 0.3f);
-        shapes.rect(10, 10, 780, 580);
-        shapes.end();
-
-        sprites.setProjectionMatrix(viewport.getCamera().combined);
-        sprites.begin();
-        sprites.draw(walk.getKeyFrame(elapsed, true),
-                     400 + 100 * (float) Math.cos(elapsed),
-                     300 + 25 * (float) Math.sin(elapsed));
-        sprites.draw(idle.getKeyFrame(elapsed, true), 50, 50);
-        sprites.end();
         
-        */
+        /* On pet à jour le niveau, la màj s'affichera à la frame suivante */
+        niveauActuel.update(Gdx.graphics.getDeltaTime());
+        
     }
 
     @Override
