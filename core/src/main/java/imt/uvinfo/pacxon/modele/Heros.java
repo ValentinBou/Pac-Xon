@@ -4,6 +4,8 @@ public class Heros extends Personnage {
 	private boolean isTracing = false;
 	private int coordonneeSpawnX = 0;
 	private int coordonneeSpawnY = -1;
+	private double precedentX = 0.0;
+	private double precedentY = 0.0;
 	private double vitesse;
 	
 	private boolean FLAG_KEY_PRESSED_ARROW_RIGHT 	= false;
@@ -41,6 +43,7 @@ public class Heros extends Personnage {
 	}
 	
 	public void update(float elapsedTime) {
+		Terrain terrain = this.jeu.getNiveauActuel().getTerrain();
 		int largeurNiveau = this.jeu.getNiveauActuel().getTerrain().getLargeur();
 		int hauteurNiveau = this.jeu.getNiveauActuel().getTerrain().getHauteur();
 		double largeurUniteBloc = 1.0 / largeurNiveau;
@@ -137,16 +140,28 @@ public class Heros extends Personnage {
 		}
 		
 		/* Vérification du bloc suivant */
+		double blocActuelX;
 		double blocSuivantX;
 		if(directionX > 0.0) {
+			blocActuelX = (posX + directionX * elapsedTime);
 			blocSuivantX = ((posX + directionX * elapsedTime) + (largeur * largeurUniteBloc));
+		} else if(directionX == 0.0) {
+			blocActuelX = (posX + directionX * elapsedTime);
+			blocSuivantX = (posX + directionX * elapsedTime);
 		} else {
+			blocActuelX = ((posX + directionX * elapsedTime) + (largeur * largeurUniteBloc));
 			blocSuivantX = (posX + directionX * elapsedTime);
 		}
+		double blocActuelY;
 		double blocSuivantY;
 		if(directionY > 0.0) {
+			blocActuelY = (posY + directionY * elapsedTime);
 			blocSuivantY = ((posY + directionY * elapsedTime) + (hauteur * hauteurUniteBloc));
+		} else if(directionY == 0.0) {
+			blocActuelY = (posY + directionY * elapsedTime);
+			blocSuivantY = (posY + directionY * elapsedTime);
 		} else {
+			blocActuelY = ((posY + directionY * elapsedTime) + (hauteur * hauteurUniteBloc));
 			blocSuivantY = (posY + directionY * elapsedTime);
 		}
 		
@@ -175,7 +190,38 @@ public class Heros extends Personnage {
 		} else {
 			posY += directionY * elapsedTime;
 		}
+		
+		
+		if((blocSuivantX >= 0.0) && (blocSuivantX < 1.0) && (blocSuivantY >= 0.0) && (blocSuivantY < 1.0)) {
+			TypeBloc blocSuivant = terrain.getBloc(blocSuivantX, blocSuivantY);
+			if(blocSuivant == TypeBloc.Vide) {
+				this.isTracing = true;
+			}
+		}
 
+
+		if(isTracing) {
+			
+			System.out.println("precedent : "+precedentX*40+","+precedentY*30);
+			System.out.println("actuel : "+blocActuelX*40+","+blocActuelY*30);
+			System.out.println("suivant : "+blocSuivantX*40+","+blocSuivantY*30);
+			
+			if((terrain.getXint(blocActuelX) != terrain.getXint(precedentX)) || (terrain.getYint(blocActuelY) != terrain.getYint(precedentY))) {
+				TypeBloc blocPrecedent = terrain.getBloc(precedentX, precedentY);
+				if (blocPrecedent == TypeBloc.Vide) {
+					terrain.setBloc(TypeBloc.Bordure, precedentX, precedentY); // TODO : Type de bloc temporaire pour test rapide
+				}
+				
+				TypeBloc blocActuel = terrain.getBloc(blocActuelX, blocActuelY);
+				if((blocActuel == TypeBloc.BlocNormal) || (blocActuel == TypeBloc.Bordure)) {
+					remplirTracage();
+					this.isTracing = false;
+				}
+				
+				precedentX = blocActuelX;
+				precedentY = blocActuelY;
+			}
+		}
 	}
 	
 	public void remplirTracage() {

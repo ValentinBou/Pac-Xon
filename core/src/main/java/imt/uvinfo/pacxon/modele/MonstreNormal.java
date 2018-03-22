@@ -38,9 +38,6 @@ public class MonstreNormal extends Personnage {
 		
 		posX = (double) ((coordonneeSpawnX + largeurNiveau) % largeurNiveau) / largeurNiveau;
 		posY = (double) ((coordonneeSpawnY + hauteurNiveau) % hauteurNiveau) / hauteurNiveau;
-		
-		System.out.println(posX);
-		System.out.println(posY);
 	}
 	
 	public void update(float elapsedTime) {
@@ -68,49 +65,7 @@ public class MonstreNormal extends Personnage {
 		}
 		
 		verifierBlocs(premierX, dernierX, premierY, dernierY);
-		
-		/* Vérification du bloc suivant */
-		/*double blocSuivantX;
-		if(directionX > 0.0) {
-			blocSuivantX = ((posX + directionX * elapsedTime) + (largeur * largeurUniteBloc));
-		} else {
-			blocSuivantX = (posX + directionX * elapsedTime);
-		}
-		double blocSuivantY;
-		if(directionY > 0.0) {
-			blocSuivantY = ((posY + directionY * elapsedTime) + (hauteur * hauteurUniteBloc));
-		} else {
-			blocSuivantY = (posY + directionY * elapsedTime);
-		}*/
-		
-		/* Vérification de la présence de bordures*/
-		/*TypeBloc tmpBloc = null;
-		double curseur;
-		
-		curseur = posY + directionY * elapsedTime;
-		
-		while((curseur <= blocSuivantY) && (curseur <= (maxPosY - hauteurUniteBloc))) {
-			tmpBloc = this.jeu.getNiveauActuel().getTerrain().getBloc(blocSuivantX, curseur);
-			if((tmpBloc == TypeBloc.Bordure) || (tmpBloc == TypeBloc.BlocNormal)) {
-				directionX = -directionX;
-				break;
-			}
-			curseur += hauteurUniteBloc;
-		}*/
-		
-		/*curseur = posX + directionX * elapsedTime;
-		
-		while((curseur <= blocSuivantX) && (curseur <= (maxPosX - largeurUniteBloc))) {
-			tmpBloc = this.jeu.getNiveauActuel().getTerrain().getBloc(curseur, blocSuivantY);
-			if((tmpBloc == TypeBloc.Bordure) || (tmpBloc == TypeBloc.BlocNormal)) {
-				directionY = -directionY;
-				break;
-			}
-			curseur += largeurUniteBloc;
-		}*/
-		
-		
-		
+
 		/* Le monstre avance (position incrémentée) */
 		
 		posX += directionX * elapsedTime;

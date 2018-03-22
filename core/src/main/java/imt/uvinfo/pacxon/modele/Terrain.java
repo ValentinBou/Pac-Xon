@@ -36,14 +36,32 @@ public class Terrain {
 		return hauteur;
 	}
 	
+	public int getXint(double Xdouble) {
+		return (int)Math.floor(Xdouble * largeur);
+	}
+	
+	public int getYint(double Ydouble) {
+		return (int)Math.floor(Ydouble * hauteur);
+	}
+	
 	public TypeBloc getBloc(int x, int y) {
 		return blocs[x][y];
 	}
 
 	public TypeBloc getBloc(double x, double y) {
-		return blocs[(int)Math.floor(x * largeur)][(int)Math.floor(y * hauteur)];
+		return blocs[getXint(x)][getYint(y)];
+	}
+	
+	protected void setBloc(TypeBloc nouveauBloc, int x, int y) {
+		if(blocs[x][y] != TypeBloc.Bordure) { // TODO : Possibilité de vérifier que le nouveau bloc est aussi autre qu'une bordure, mais moins grave
+			blocs[x][y] = nouveauBloc;
+		}
 	}
 
-
+	protected void setBloc(TypeBloc nouveauBloc, double x, double y) {
+		if(blocs[getXint(x)][getYint(y)] != TypeBloc.Bordure) {
+			blocs[getXint(x)][getYint(y)] = nouveauBloc;
+		}
+	}
 
 }
