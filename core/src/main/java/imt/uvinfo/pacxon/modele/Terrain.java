@@ -41,7 +41,7 @@ public class Terrain {
 	}
 
 	public TypeBloc getBloc(double x, double y) {
-		return blocs[(int)(x * largeur)][(int)(y * hauteur)];
+		return blocs[(int)Math.floor(x * largeur)][(int)Math.floor(y * hauteur)];
 	}
 
 

@@ -40,11 +40,11 @@ public abstract class Personnage {
 		return apparu;
 	}
 
-	public double getLargeur() {
+	public int getLargeur() {
 		return largeur;
 	}
 
-	public double getHauteur() {
+	public int getHauteur() {
 		return hauteur;
 	}
 

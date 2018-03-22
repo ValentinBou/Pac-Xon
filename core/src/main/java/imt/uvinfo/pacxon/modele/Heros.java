@@ -92,28 +92,46 @@ public class Heros extends Personnage {
 			}
 		} else {
 			if(directionX != 0.0) {
-				if(FLAG_KEY_PRESSED_ARROW_UP) {
-					posX = (double) (Math.round(posX * largeurNiveau)) / largeurNiveau;
-					posY = (double) (Math.round(posY * hauteurNiveau)) / hauteurNiveau;
-					directionX = 0.0;
-					directionY = vitesse;
-				} else if(FLAG_KEY_PRESSED_ARROW_DOWN) {
-					posX = (double) (Math.round(posX * largeurNiveau)) / largeurNiveau;
-					posY = (double) (Math.round(posY * hauteurNiveau)) / hauteurNiveau;
-					directionX = 0.0;
-					directionY = -vitesse;
+				if(!FLAG_KEY_PRESSED_ARROW_RIGHT && !FLAG_KEY_PRESSED_ARROW_LEFT) {
+					if(FLAG_KEY_PRESSED_ARROW_UP) {
+						posX = (double) (Math.round(posX * largeurNiveau)) / largeurNiveau;
+						posY = (double) (Math.round(posY * hauteurNiveau)) / hauteurNiveau;
+						directionX = 0.0;
+						directionY = vitesse;
+					} else if(FLAG_KEY_PRESSED_ARROW_DOWN) {
+						posX = (double) (Math.round(posX * largeurNiveau)) / largeurNiveau;
+						posY = (double) (Math.round(posY * hauteurNiveau)) / hauteurNiveau;
+						directionX = 0.0;
+						directionY = -vitesse;
+					}
 				}
 			} else if(directionY != 0.0) {
+				if(!FLAG_KEY_PRESSED_ARROW_UP && !FLAG_KEY_PRESSED_ARROW_DOWN) {
+					if(FLAG_KEY_PRESSED_ARROW_RIGHT) {
+						posX = (double) (Math.round(posX * largeurNiveau)) / largeurNiveau;
+						posY = (double) (Math.round(posY * hauteurNiveau)) / hauteurNiveau;
+						directionX = vitesse;
+						directionY = 0.0;
+					} else if(FLAG_KEY_PRESSED_ARROW_LEFT) {
+						posX = (double) (Math.round(posX * largeurNiveau)) / largeurNiveau;
+						posY = (double) (Math.round(posY * hauteurNiveau)) / hauteurNiveau;
+						directionX = -vitesse;
+						directionY = 0.0;
+					}
+				}
+			} else {
 				if(FLAG_KEY_PRESSED_ARROW_RIGHT) {
-					posX = (double) (Math.round(posX * largeurNiveau)) / largeurNiveau;
-					posY = (double) (Math.round(posY * hauteurNiveau)) / hauteurNiveau;
 					directionX = vitesse;
 					directionY = 0.0;
+				} else if(FLAG_KEY_PRESSED_ARROW_UP) {
+					directionX = 0.0;
+					directionY = vitesse;
 				} else if(FLAG_KEY_PRESSED_ARROW_LEFT) {
-					posX = (double) (Math.round(posX * largeurNiveau)) / largeurNiveau;
-					posY = (double) (Math.round(posY * hauteurNiveau)) / hauteurNiveau;
 					directionX = -vitesse;
 					directionY = 0.0;
+				} else if(FLAG_KEY_PRESSED_ARROW_DOWN) {
+					directionX = 0.0;
+					directionY = -vitesse;
 				}
 			}
 		}
@@ -133,37 +151,31 @@ public class Heros extends Personnage {
 		}
 		
 		
-		
+		/* On avance et bloque aux limites du terrain */
 		if(blocSuivantX < 0.0) {
 			posX = 0.0;
+			directionX = 0.0;
+			directionY = 0.0;
 		} else if(blocSuivantX >= 1.0) {
 			posX = maxPosX;
+			directionX = 0.0;
+			directionY = 0.0;
 		} else {
 			posX += directionX * elapsedTime;
 		}
 
 		if(blocSuivantY < 0.0) {
 			posY = 0.0;
+			directionX = 0.0;
+			directionY = 0.0;
 		} else if(blocSuivantY >= 1.0) {
 			posY = maxPosY;
+			directionX = 0.0;
+			directionY = 0.0;
 		} else {
 			posY += directionY * elapsedTime;
 		}
-		
-		/*posX += directionX * elapsedTime;
-		if(posX > maxPosX) {
-			posX = maxPosX;
-		} else if(posX < 0.0) {
-			posX = 0.0;
-		}*/
-		/*posY += directionY * elapsedTime;
-		if(posY > maxPosY) {
-			posY = maxPosY;
-		} else if(posY < 0.0) {
-			posY = 0.0;
-		}*/
-		
-		/* On gère l'entrée dans un nouveau bloc */
+
 	}
 	
 	public void remplirTracage() {

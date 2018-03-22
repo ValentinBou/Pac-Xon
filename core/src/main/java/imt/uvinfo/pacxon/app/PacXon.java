@@ -145,7 +145,7 @@ public class PacXon implements ApplicationListener {
         sprites.draw(textures.findRegion("blocsUnicolor_heros"), (int)(niveauActuel.getHeros().getPosX()*800), (int)(niveauActuel.getHeros().getPosY()*600), unitLargeur, unitHauteur);
         
         for(i = 0; i < niveauActuel.getNbPersonnages(); i++) {
-        	sprites.draw(textures.findRegion("blocsUnicolor_monstre"), (int)(niveauActuel.getPersonnage(i).getPosX()*800), (int)(niveauActuel.getPersonnage(i).getPosY()*600), unitLargeur, unitHauteur);
+        	sprites.draw(textures.findRegion("blocsUnicolor_monstre"), (int)(niveauActuel.getPersonnage(i).getPosX()*800), (int)(niveauActuel.getPersonnage(i).getPosY()*600), niveauActuel.getPersonnage(i).getLargeur()*unitLargeur, niveauActuel.getPersonnage(i).getHauteur()*unitHauteur);
         }
         
         //sprites.draw(textures.findRegion("blocsUnicolor_bordure"), 0, 0, unitLargeur, unitHauteur);
