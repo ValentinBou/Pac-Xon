@@ -69,14 +69,30 @@ public abstract class Personnage {
 	}
 	/* Fin Getters Setters */
 	
-	private boolean essayerDApparaitre() {
-		apparu = true;
-		return apparu;
+	// Vérifie si une partie d'un personnage est présente sur un bloc en particulier
+	protected boolean estDansBloc(int x, int y) {
+		Terrain terrain = this.jeu.getNiveauActuel().getTerrain();
+		int i, j;
+		
+		// Pour chaque bloc sur le quel est présent le monstre
+		for(i = terrain.getXint(posX); i < (terrain.getXint(posX) + largeur); i++) {
+			for(j = terrain.getYint(posY); j < (terrain.getYint(posY) + hauteur); j++) {
+				// Le bloc correspond au bloc recherché : le monstre est sur le bloc
+				if((i == x) && (j == y)) {
+					return true;
+				}
+			}
+		}
+		
+		// Aucun des blocs sur lesquels est le monstre correspond au bloc recherché : le monstre n'est pas sur le bloc
+		return false;
 	}
+	
+	// Cette méthode sera utile pour des monstres qui n'apparraissent que dans certaines conditions
+	abstract boolean essayerDApparaitre();
 	
 	abstract void update(float elapsedTime);
 	
 	abstract void initier();
-	
 	
 }

@@ -2,12 +2,15 @@ package imt.uvinfo.pacxon.modele;
 
 public class Heros extends Personnage {
 	private boolean isTracing = false;
+	// Position de départ
 	private int coordonneeSpawnX = 0;
 	private int coordonneeSpawnY = -1;
+	// Position précédente
 	private double precedentX = 0.0;
 	private double precedentY = 0.0;
 	private double vitesse;
 	
+	// Spécification des touches appuyées
 	private boolean FLAG_KEY_PRESSED_ARROW_RIGHT 	= false;
 	private boolean FLAG_KEY_PRESSED_ARROW_UP 		= false;
 	private boolean FLAG_KEY_PRESSED_ARROW_LEFT 	= false;
@@ -23,7 +26,7 @@ public class Heros extends Personnage {
 		hauteur = 1;
 		coordonneeSpawnX = 0;
 		coordonneeSpawnY = -1; // Coordonnée en partant du haut de l'écran
-		vitesse = 0.5;
+		vitesse = 0.4;
 		iconeName = "iconeHeros";
 		/* End Configuration héros */
 		
@@ -35,11 +38,18 @@ public class Heros extends Personnage {
 	}
 
 	protected void initier() {
+		essayerDApparaitre();
+	}
+	
+	protected boolean essayerDApparaitre() {
 		int largeurNiveau = this.jeu.getNiveauActuel().getTerrain().getLargeur();
 		int hauteurNiveau = this.jeu.getNiveauActuel().getTerrain().getHauteur();
 		
 		posX = (double) ((coordonneeSpawnX + largeurNiveau) % largeurNiveau) / largeurNiveau;
 		posY = (double) ((coordonneeSpawnY + hauteurNiveau) % hauteurNiveau) / hauteurNiveau;
+		
+		// Apparait toujours avec succes
+		return true;
 	}
 	
 	public void update(float elapsedTime) {
@@ -51,7 +61,11 @@ public class Heros extends Personnage {
 		double maxPosX = 1.0 - ((double)largeur / largeurNiveau);
 		double maxPosY = 1.0 - ((double)hauteur / hauteurNiveau);
 		
+		double directionprecedenteX = directionX;
+		double directionprecedenteY = directionY;
+		
 		if(!isTracing) {
+			// Le héros ne trace pas, il peut aller dans n'importe quelle direction et s'arrêter
 			if(FLAG_KEY_PRESSED_ARROW_RIGHT) {
 				/* Changement de direction */
 				if(directionX <= 0.0) {
@@ -94,6 +108,7 @@ public class Heros extends Personnage {
 				directionY = 0.0;
 			}
 		} else {
+			// Le héros trace, il ne peut aller que sur sa droite, sa gauche, et ne peut pas s'arrêter
 			if(directionX != 0.0) {
 				if(!FLAG_KEY_PRESSED_ARROW_RIGHT && !FLAG_KEY_PRESSED_ARROW_LEFT) {
 					if(FLAG_KEY_PRESSED_ARROW_UP) {
@@ -123,6 +138,7 @@ public class Heros extends Personnage {
 					}
 				}
 			} else {
+				// Si le héros est arrêté : ne devrait pasarriver
 				if(FLAG_KEY_PRESSED_ARROW_RIGHT) {
 					directionX = vitesse;
 					directionY = 0.0;
@@ -142,12 +158,13 @@ public class Heros extends Personnage {
 		/* Vérification du bloc suivant */
 		double blocActuelX;
 		double blocSuivantX;
+		// Récupération des informations relatives à la position du héros
 		if(directionX > 0.0) {
 			blocActuelX = (posX + directionX * elapsedTime);
 			blocSuivantX = ((posX + directionX * elapsedTime) + (largeur * largeurUniteBloc));
 		} else if(directionX == 0.0) {
-			blocActuelX = (posX + directionX * elapsedTime);
-			blocSuivantX = (posX + directionX * elapsedTime);
+			blocActuelX = posX;
+			blocSuivantX = posX;
 		} else {
 			blocActuelX = ((posX + directionX * elapsedTime) + (largeur * largeurUniteBloc));
 			blocSuivantX = (posX + directionX * elapsedTime);
@@ -158,11 +175,23 @@ public class Heros extends Personnage {
 			blocActuelY = (posY + directionY * elapsedTime);
 			blocSuivantY = ((posY + directionY * elapsedTime) + (hauteur * hauteurUniteBloc));
 		} else if(directionY == 0.0) {
-			blocActuelY = (posY + directionY * elapsedTime);
-			blocSuivantY = (posY + directionY * elapsedTime);
+			blocActuelY = posY;
+			blocSuivantY = posY;
 		} else {
 			blocActuelY = ((posY + directionY * elapsedTime) + (hauteur * hauteurUniteBloc));
 			blocSuivantY = (posY + directionY * elapsedTime);
+		}
+		
+		TypeBloc blocActuel = terrain.getBloc(blocActuelX, blocActuelY);
+		
+		if(blocActuel == TypeBloc.Vide) {
+			// Le bloc sur lequel est le héros est vide, son mode traçage s'active
+			this.isTracing = true;
+			/* En mode traçage le héros ne peut pas être arrêté */
+			if(directionX == 0 && directionY == 0) {
+				directionX = directionprecedenteX;
+				directionY = directionprecedenteY;
+			}
 		}
 		
 		
@@ -191,41 +220,30 @@ public class Heros extends Personnage {
 			posY += directionY * elapsedTime;
 		}
 		
-		
-		if((blocSuivantX >= 0.0) && (blocSuivantX < 1.0) && (blocSuivantY >= 0.0) && (blocSuivantY < 1.0)) {
-			TypeBloc blocSuivant = terrain.getBloc(blocSuivantX, blocSuivantY);
-			if(blocSuivant == TypeBloc.Vide) {
-				this.isTracing = true;
-			}
-		}
-
 
 		if(isTracing) {
-			
-			System.out.println("precedent : "+precedentX*40+","+precedentY*30);
-			System.out.println("actuel : "+blocActuelX*40+","+blocActuelY*30);
-			System.out.println("suivant : "+blocSuivantX*40+","+blocSuivantY*30);
+			// Comportement si le héros est en mode Tracage
 			
 			if((terrain.getXint(blocActuelX) != terrain.getXint(precedentX)) || (terrain.getYint(blocActuelY) != terrain.getYint(precedentY))) {
+				// Le héros entre dans un nouveau bloc
 				TypeBloc blocPrecedent = terrain.getBloc(precedentX, precedentY);
 				if (blocPrecedent == TypeBloc.Vide) {
-					terrain.setBloc(TypeBloc.Trace, precedentX, precedentY); // TODO : Type de bloc temporaire pour test rapide
+					// Remplit le bloc précédent en "Trace"
+					terrain.setBloc(TypeBloc.Trace, precedentX, precedentY);
 				}
 				
-				TypeBloc blocActuel = terrain.getBloc(blocActuelX, blocActuelY);
 				if((blocActuel == TypeBloc.BlocNormal) || (blocActuel == TypeBloc.Bordure)) {
-					remplirTracage();
+					// Il atteint un bloc rempli : il remplit le terrain et désactive son mode tracage
+					jeu.getNiveauActuel().remplirTracage(terrain.getXint(precedentX), terrain.getYint(precedentY));
 					this.isTracing = false;
 				}
 				
-				precedentX = blocActuelX;
-				precedentY = blocActuelY;
+
 			}
 		}
-	}
-	
-	public void remplirTracage() {
-		// TODO Algo
+		
+		precedentX = blocActuelX;
+		precedentY = blocActuelY;
 	}
 	
 	public void setFlagArrowRight() {
@@ -275,5 +293,6 @@ public class Heros extends Personnage {
 	public boolean isSetFlagArrowDown() {
 		return FLAG_KEY_PRESSED_ARROW_DOWN;
 	}
+
 	
 }

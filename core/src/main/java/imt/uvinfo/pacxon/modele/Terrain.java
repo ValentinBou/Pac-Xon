@@ -27,6 +27,32 @@ public class Terrain {
 			}
 		}
 	}
+	
+	// Remplace tous les blocs "Tracage" par des "BlocNormal"
+	protected void remplacerTracageParBloc() {
+		int i, j;
+		
+		for(i = 0; i < largeur; i++) {
+			for(j = 0; j < hauteur; j++) {
+				if(blocs[i][j] == TypeBloc.Trace || blocs[i][j] == TypeBloc.TraceTouche) {
+					blocs[i][j] = TypeBloc.BlocNormal;
+				}
+			}
+		}
+	}
+	
+	// Remplace tous les blocs "Tracage" par des "Vide"
+	protected void remplacerTracageParVide() {
+		int i, j;
+		
+		for(i = 0; i < largeur; i++) {
+			for(j = 0; j < hauteur; j++) {
+				if(blocs[i][j] == TypeBloc.Trace || blocs[i][j] == TypeBloc.TraceTouche) {
+					blocs[i][j] = TypeBloc.Vide;
+				}
+			}
+		}
+	}
 
 	public int getLargeur() {
 		return largeur;
@@ -36,32 +62,58 @@ public class Terrain {
 		return hauteur;
 	}
 	
+	// Donne la coordonnée du terrain entière correspondante à la coordonnée flottante
 	public int getXint(double Xdouble) {
 		return (int)Math.floor(Xdouble * largeur);
 	}
 	
+	// Donne la coordonnée du terrain entière correspondante à la coordonnée flottante
 	public int getYint(double Ydouble) {
 		return (int)Math.floor(Ydouble * hauteur);
 	}
 	
+	// Récupération d'un bloc, bloque aux limites du terrain
 	public TypeBloc getBloc(int x, int y) {
+		if(x < 0) {
+			x = 0;
+		} else if(x >= largeur) {
+			x = largeur - 1;
+		}
+		
+		if(y < 0) {
+			y = 0;
+		} else if(y >= hauteur) {
+			y = hauteur - 1;
+		}
+		
 		return blocs[x][y];
 	}
 
 	public TypeBloc getBloc(double x, double y) {
-		return blocs[getXint(x)][getYint(y)];
+		return getBloc(getXint(x),getYint(y));
 	}
 	
+	// Remplacement d'un bloc, bloque aux limites du terrain
 	protected void setBloc(TypeBloc nouveauBloc, int x, int y) {
+		if(x < 0) {
+			x = 0;
+		} else if(x >= largeur) {
+			x = largeur - 1;
+		}
+		
+		if(y < 0) {
+			y = 0;
+		} else if(y >= hauteur) {
+			y = hauteur - 1;
+		}
+		
 		if(blocs[x][y] != TypeBloc.Bordure) { // TODO : Possibilité de vérifier que le nouveau bloc est aussi autre qu'une bordure, mais moins grave
 			blocs[x][y] = nouveauBloc;
 		}
 	}
 
 	protected void setBloc(TypeBloc nouveauBloc, double x, double y) {
-		if(blocs[getXint(x)][getYint(y)] != TypeBloc.Bordure) {
-			blocs[getXint(x)][getYint(y)] = nouveauBloc;
-		}
+		setBloc(nouveauBloc,getXint(x),getYint(y));
 	}
 
 }
