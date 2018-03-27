@@ -2,15 +2,15 @@ package imt.uvinfo.pacxon.modele;
 
 public class Heros extends Personnage {
 	private boolean isTracing = false;
-	// Position de départ
+	// Position de dÃ©part
 	private int coordonneeSpawnX = 0;
 	private int coordonneeSpawnY = -1;
-	// Position précédente
+	// Position prÃ©cÃ©dente
 	private double precedentX = 0.0;
 	private double precedentY = 0.0;
 	private double vitesse;
 	
-	// Spécification des touches appuyées
+	// SpÃ©cification des touches appuyÃ©es
 	private boolean FLAG_KEY_PRESSED_ARROW_RIGHT 	= false;
 	private boolean FLAG_KEY_PRESSED_ARROW_UP 		= false;
 	private boolean FLAG_KEY_PRESSED_ARROW_LEFT 	= false;
@@ -19,16 +19,16 @@ public class Heros extends Personnage {
 	public Heros(Jeu jeu) {
 		super(jeu);
 		
-		/* Configuration héros */
-		/* TODO : possibilité d'utiliser un fichier de config */
+		/* Configuration hÃ©ros */
+		/* TODO : possibilitÃ© d'utiliser un fichier de config */
 		apparu = true;
 		largeur = 1;
 		hauteur = 1;
 		coordonneeSpawnX = 0;
-		coordonneeSpawnY = -1; // Coordonnée en partant du haut de l'écran
+		coordonneeSpawnY = -1; // CoordonnÃ©e en partant du haut de l'Ã©cran
 		vitesse = 0.4;
 		iconeName = "iconeHeros";
-		/* End Configuration héros */
+		/* End Configuration hÃ©ros */
 		
 		directionX = 0.0;
 		directionY = 0.0;
@@ -54,8 +54,8 @@ public class Heros extends Personnage {
 	
 	public void update(float elapsedTime) {
 		Terrain terrain = this.jeu.getNiveauActuel().getTerrain();
-		int largeurNiveau = this.jeu.getNiveauActuel().getTerrain().getLargeur();
-		int hauteurNiveau = this.jeu.getNiveauActuel().getTerrain().getHauteur();
+		int largeurNiveau = terrain.getLargeur();
+		int hauteurNiveau = terrain.getHauteur();
 		double largeurUniteBloc = 1.0 / largeurNiveau;
 		double hauteurUniteBloc = 1.0 / hauteurNiveau;
 		double maxPosX = 1.0 - ((double)largeur / largeurNiveau);
@@ -65,7 +65,7 @@ public class Heros extends Personnage {
 		double directionprecedenteY = directionY;
 		
 		if(!isTracing) {
-			// Le héros ne trace pas, il peut aller dans n'importe quelle direction et s'arrêter
+			// Le hÃ©ros ne trace pas, il peut aller dans n'importe quelle direction et s'arrÃªter
 			if(FLAG_KEY_PRESSED_ARROW_RIGHT) {
 				/* Changement de direction */
 				if(directionX <= 0.0) {
@@ -103,12 +103,12 @@ public class Heros extends Personnage {
 					posX = (double) (Math.round(posX * largeurNiveau)) / largeurNiveau;
 					posY = (double) (Math.round(posY * hauteurNiveau)) / hauteurNiveau;
 				}
-				// Pas de touche appuyée, le héros de fait rien
+				// Pas de touche appuyÃ©e, le hÃ©ros de fait rien
 				directionX = 0.0;
 				directionY = 0.0;
 			}
 		} else {
-			// Le héros trace, il ne peut aller que sur sa droite, sa gauche, et ne peut pas s'arrêter
+			// Le hÃ©ros trace, il ne peut aller que sur sa droite, sa gauche, et ne peut pas s'arrÃªter
 			if(directionX != 0.0) {
 				if(!FLAG_KEY_PRESSED_ARROW_RIGHT && !FLAG_KEY_PRESSED_ARROW_LEFT) {
 					if(FLAG_KEY_PRESSED_ARROW_UP) {
@@ -138,7 +138,7 @@ public class Heros extends Personnage {
 					}
 				}
 			} else {
-				// Si le héros est arrêté : ne devrait pasarriver
+				// Si le hÃ©ros est arrÃªtÃ© : ne devrait pasarriver
 				if(FLAG_KEY_PRESSED_ARROW_RIGHT) {
 					directionX = vitesse;
 					directionY = 0.0;
@@ -155,10 +155,10 @@ public class Heros extends Personnage {
 			}
 		}
 		
-		/* Vérification du bloc suivant */
+		/* VÃ©rification du bloc suivant */
 		double blocActuelX;
 		double blocSuivantX;
-		// Récupération des informations relatives à la position du héros
+		// RÃ©cupÃ©ration des informations relatives Ã  la position du hÃ©ros
 		if(directionX > 0.0) {
 			blocActuelX = (posX + directionX * elapsedTime);
 			blocSuivantX = ((posX + directionX * elapsedTime) + (largeur * largeurUniteBloc));
@@ -185,9 +185,9 @@ public class Heros extends Personnage {
 		TypeBloc blocActuel = terrain.getBloc(blocActuelX, blocActuelY);
 		
 		if(blocActuel == TypeBloc.Vide) {
-			// Le bloc sur lequel est le héros est vide, son mode traçage s'active
+			// Le bloc sur lequel est le hÃ©ros est vide, son mode traÃ§age s'active
 			this.isTracing = true;
-			/* En mode traçage le héros ne peut pas être arrêté */
+			/* En mode traÃ§age le hÃ©ros ne peut pas Ãªtre arrÃªtÃ© */
 			if(directionX == 0 && directionY == 0) {
 				directionX = directionprecedenteX;
 				directionY = directionprecedenteY;
@@ -222,18 +222,18 @@ public class Heros extends Personnage {
 		
 
 		if(isTracing) {
-			// Comportement si le héros est en mode Tracage
+			// Comportement si le hÃ©ros est en mode Tracage
 			
 			if((terrain.getXint(blocActuelX) != terrain.getXint(precedentX)) || (terrain.getYint(blocActuelY) != terrain.getYint(precedentY))) {
-				// Le héros entre dans un nouveau bloc
+				// Le hÃ©ros entre dans un nouveau bloc
 				TypeBloc blocPrecedent = terrain.getBloc(precedentX, precedentY);
 				if (blocPrecedent == TypeBloc.Vide) {
-					// Remplit le bloc précédent en "Trace"
+					// Remplit le bloc prÃ©cÃ©dent en "Trace"
 					terrain.setBloc(TypeBloc.Trace, precedentX, precedentY);
 				}
 				
 				if((blocActuel == TypeBloc.BlocNormal) || (blocActuel == TypeBloc.Bordure)) {
-					// Il atteint un bloc rempli : il remplit le terrain et désactive son mode tracage
+					// Il atteint un bloc rempli : il remplit le terrain et dÃ©sactive son mode tracage
 					jeu.getNiveauActuel().remplirTracage(terrain.getXint(precedentX), terrain.getYint(precedentY));
 					this.isTracing = false;
 				}
