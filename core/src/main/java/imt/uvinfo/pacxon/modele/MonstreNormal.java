@@ -49,7 +49,7 @@ public class MonstreNormal extends Personnage {
 	}
 	
 	public void update(float elapsedTime) {
-		Terrain terrain = this.jeu.getNiveauActuel().getTerrain()
+		Terrain terrain = this.jeu.getNiveauActuel().getTerrain();
 		int largeurNiveau = terrain.getLargeur();
 		int hauteurNiveau = terrain.getHauteur();
 		double largeurUniteBloc = 1.0 / largeurNiveau;
