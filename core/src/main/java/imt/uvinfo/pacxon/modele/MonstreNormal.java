@@ -11,14 +11,14 @@ public class MonstreNormal extends Personnage {
 		super(jeu);
 		
 		/* Configuration monstre normal */
-		/* TODO : possibilité d'utiliser un fichier de config */
+		/* TODO : possibilitÃ© d'utiliser un fichier de config */
 		apparu = true;
 		largeur = 1;
 		hauteur = 1;
 
 		vitesse = 0.5;
-		coeffDirectionDepart = 0.25 * Math.PI; // Angle de départ [0*pi, 2*pi[
-		iconeName = "iconeHeros";
+		coeffDirectionDepart = 0.25 * Math.PI; // Angle de dÃ©part [0*pi, 2*pi[
+		iconeName = "iconeMonstreNormal";
 		/* End Configuration monstre normal */
 		
 		directionX = vitesse * Math.cos(coeffDirectionDepart);
@@ -36,7 +36,7 @@ public class MonstreNormal extends Personnage {
 		int largeurNiveau = this.jeu.getNiveauActuel().getTerrain().getLargeur();
 		int hauteurNiveau = this.jeu.getNiveauActuel().getTerrain().getHauteur();
 		
-		// Position aléatoire à l'intérieur des bordures (bordures exclues)
+		// Position alÃ©atoire Ã  l'intÃ©rieur des bordures (bordures exclues)
 		Random rand = new Random();
 		int coordonneeSpawnX = rand.nextInt(largeurNiveau - 2) + 1; // "-2" et "+1" pour exclure les bordures
 		int coordonneeSpawnY = rand.nextInt(hauteurNiveau - 2) + 1; // "-2" et "+1" pour exclure les bordures
@@ -49,14 +49,15 @@ public class MonstreNormal extends Personnage {
 	}
 	
 	public void update(float elapsedTime) {
-		int largeurNiveau = this.jeu.getNiveauActuel().getTerrain().getLargeur();
-		int hauteurNiveau = this.jeu.getNiveauActuel().getTerrain().getHauteur();
+		Terrain terrain = this.jeu.getNiveauActuel().getTerrain()
+		int largeurNiveau = terrain.getLargeur();
+		int hauteurNiveau = terrain.getHauteur();
 		double largeurUniteBloc = 1.0 / largeurNiveau;
 		double hauteurUniteBloc = 1.0 / hauteurNiveau;
 		
 		double premierX, dernierX, premierY, dernierY;
 		
-		// On détermine les limites du personnage, en fonction de sa direction
+		// On dÃ©termine les limites du personnage, en fonction de sa direction
 		if(directionX < 0.0) {
 			premierX = ((posX + directionX * elapsedTime) + (largeur * largeurUniteBloc));
 			dernierX = (posX + directionX * elapsedTime);
@@ -73,16 +74,16 @@ public class MonstreNormal extends Personnage {
 			dernierY = ((posY + directionY * elapsedTime) + (hauteur * hauteurUniteBloc));
 		}
 		
-		// Actions en fonction de la présence de blocs sur le trajet
+		// Actions en fonction de la prÃ©sence de blocs sur le trajet
 		verifierBlocs(premierX, dernierX, premierY, dernierY);
 
-		/* Le monstre avance (position incrémentée) */
+		/* Le monstre avance (position incrÃ©mentÃ©e) */
 		posX += directionX * elapsedTime;
 		posY += directionY * elapsedTime;
 
 	}
 	
-	// Actions en fonction de la présence de blocs sur le trajet
+	// Actions en fonction de la prÃ©sence de blocs sur le trajet
 	private void verifierBlocs(double premierX, double dernierX, double premierY, double dernierY) {
 		int largeurNiveau = this.jeu.getNiveauActuel().getTerrain().getLargeur();
 		int hauteurNiveau = this.jeu.getNiveauActuel().getTerrain().getHauteur();
@@ -91,7 +92,7 @@ public class MonstreNormal extends Personnage {
 		double maxPosX = 1.0 - ((double)largeur / largeurNiveau);
 		double maxPosY = 1.0 - ((double)hauteur / hauteurNiveau);		
 		
-		/* Vérification de la présence de blocs */
+		/* VÃ©rification de la prÃ©sence de blocs */
 		TypeBloc tmpBloc = null;
 		double curseur;
 		double incrementeValeur;
@@ -100,7 +101,7 @@ public class MonstreNormal extends Personnage {
 		
 		curseur = premierX;
 		
-		// Vérifications de la présence de bloc en haut ou bas du monstre (selon la direction)
+		// VÃ©rifications de la prÃ©sence de bloc en haut ou bas du monstre (selon la direction)
 		if(directionX < 0.0) {
 			incrementeValeur = -largeurUniteBloc;
 			while((curseur >= (dernierX + largeurUniteBloc)) && (curseur >= (0.0))) {
@@ -131,7 +132,7 @@ public class MonstreNormal extends Personnage {
 		
 		curseur = premierY;
 		
-		// Vérifications de la présence de bloc à la droite ou à la gauche du monstre (selon la direction)
+		// VÃ©rifications de la prÃ©sence de bloc Ã  la droite ou Ã  la gauche du monstre (selon la direction)
 		if(directionY < 0.0) {
 			incrementeValeur = -hauteurUniteBloc;
 			while((curseur >= (dernierY + hauteurUniteBloc)) && (curseur >= (0.0))) {
