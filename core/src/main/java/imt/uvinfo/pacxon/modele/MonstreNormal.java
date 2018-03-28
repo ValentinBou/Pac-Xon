@@ -99,6 +99,8 @@ public class MonstreNormal extends Personnage {
 		double incrementeValeur;
 		boolean isDevieX = false;
 		boolean isDevieY = false;
+		// La trace a été touchée ?
+		boolean traceTouche = false;
 		
 		curseur = premierX;
 		
@@ -112,6 +114,10 @@ public class MonstreNormal extends Personnage {
 				if(tmpBloc != TypeBloc.Vide) {
 					directionY = -directionY;
 					isDevieY = true;
+					if(tmpBloc.isTrace() && !traceTouche) {
+						traceTouche = true;
+						terrain.toucherTrace(curseur, dernierY);
+					}
 					break;
 				}
 				curseur += incrementeValeur;
@@ -125,6 +131,10 @@ public class MonstreNormal extends Personnage {
 				if(tmpBloc != TypeBloc.Vide) {
 					directionY = -directionY;
 					isDevieY = true;
+					if(tmpBloc.isTrace() && !traceTouche) {
+						traceTouche = true;
+						terrain.toucherTrace(curseur, dernierY);
+					}
 					break;
 				}
 				curseur += incrementeValeur;
@@ -143,6 +153,10 @@ public class MonstreNormal extends Personnage {
 				if(tmpBloc != TypeBloc.Vide) {
 					directionX = -directionX;
 					isDevieX = true;
+					if(tmpBloc.isTrace() && !traceTouche) {
+						traceTouche = true;
+						terrain.toucherTrace(dernierX, curseur);
+					}
 					break;
 				}
 				curseur += incrementeValeur;
@@ -156,6 +170,10 @@ public class MonstreNormal extends Personnage {
 				if(tmpBloc != TypeBloc.Vide) {
 					directionX = -directionX;
 					isDevieX = true;
+					if(tmpBloc.isTrace() && !traceTouche) {
+						traceTouche = true;
+						terrain.toucherTrace(dernierX, curseur);
+					}
 					break;
 				}
 				curseur += incrementeValeur;
@@ -170,6 +188,10 @@ public class MonstreNormal extends Personnage {
 			if(tmpBloc != TypeBloc.Vide) {
 				directionX = -directionX;
 				directionY = -directionY;
+				if(tmpBloc.isTrace() && !traceTouche) {
+					traceTouche = true;
+					terrain.toucherTrace(dernierX, dernierY);
+				}
 			}
 
 		}	

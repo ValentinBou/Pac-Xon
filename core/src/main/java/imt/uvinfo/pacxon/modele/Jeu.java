@@ -33,16 +33,16 @@ public class Jeu {
 		double defPourcentObjectif = 0.8;
 		
 		monstres.add(new MonstreNormal(this));
-		listeNiveaux.add(new Niveau(1, defX, defY, new Heros(this), monstres, defPourcentObjectif));
+		listeNiveaux.add(new Niveau(this, 1, defX, defY, new Heros(this), monstres, defPourcentObjectif));
 		monstres.clear();
 		monstres.add(new MonstreNormal(this));
 		monstres.add(new MonstreNormal(this));
-		listeNiveaux.add(new Niveau(2, defX, defY, new Heros(this), monstres, defPourcentObjectif));
+		listeNiveaux.add(new Niveau(this, 2, defX, defY, new Heros(this), monstres, defPourcentObjectif));
 		monstres.clear();
 		monstres.add(new MonstreNormal(this));
 		monstres.add(new MonstreNormal(this));
 		monstres.add(new MonstreNormal(this));
-		listeNiveaux.add(new Niveau(3, defX, defY, new Heros(this), monstres, defPourcentObjectif));
+		listeNiveaux.add(new Niveau(this, 3, defX, defY, new Heros(this), monstres, defPourcentObjectif));
 		monstres.clear();
 		
 		// Init du premier niveau (actuel)

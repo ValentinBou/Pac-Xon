@@ -13,7 +13,7 @@ public class Terrain {
 	
 	private Trace trace;
 	
-	public Terrain(int x, int y){
+	public Terrain(Jeu jeu, int x, int y){
 		int i, j;
 		
 		blocs = new TypeBloc[x][y];
@@ -36,7 +36,7 @@ public class Terrain {
 			}
 		}
 		
-		trace = new Trace();
+		trace = new Trace(jeu);
 	}
 	
 	protected void update(float elapsedTime) {
@@ -45,12 +45,14 @@ public class Terrain {
 	
 	// La trace s'est faite toucher, on initialise la propagation
 	protected void toucherTrace(double x, double y) {
-		trace.toucherTrace(getXint(x), getYint(y));
+		trace.toucher(getXint(x), getYint(y));
 	}
 	
 	// Remplace tous les blocs "Tracage" par des "BlocNormal"
 	protected void remplacerTracageParBloc() {
 		int i, j;
+		
+		trace.reinit();
 		
 		for(i = 0; i < largeur; i++) {
 			for(j = 0; j < hauteur; j++) {
@@ -66,11 +68,12 @@ public class Terrain {
 	protected void deleteTracage() {
 		int i, j;
 		
+		trace.reinit();
+		
 		for(i = 0; i < largeur; i++) {
 			for(j = 0; j < hauteur; j++) {
 				if(blocs[i][j] == TypeBloc.Trace || blocs[i][j] == TypeBloc.TraceTouche) {
 					blocs[i][j] = TypeBloc.Vide;
-					nbBlocsRemplis++;
 				}
 			}
 		}
@@ -127,7 +130,6 @@ public class Terrain {
 	}
 	
 	public double getPourcentRemplissage() {
-		System.out.println((double)nbBlocsRemplis/(double)nbBlocsTotal);
 		return ((double)nbBlocsRemplis/(double)nbBlocsTotal);
 	}
 	
@@ -176,7 +178,7 @@ public class Terrain {
 			y = hauteur - 1;
 		}
 		
-		if(blocs[x][y] != TypeBloc.Bordure && !blocs[x][y].isTrace()) { // TODO : Possibilit� de v�rifier que le nouveau bloc est aussi autre qu'une bordure, mais moins grave
+		if(blocs[x][y] != TypeBloc.Bordure) { // TODO : Possibilit� de v�rifier que le nouveau bloc est aussi autre qu'une bordure, mais moins grave
 			blocs[x][y] = nouveauBloc;
 		}
 	}

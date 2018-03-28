@@ -15,7 +15,7 @@ public class Niveau {
 	// Pourcentage de blocs � remplir pour gagner le niveau
 	private double pourcentageObjectif;
 	
-	public Niveau(int num, int x, int y, Heros heros, ArrayList<Personnage> monstres, double pourcentObjectif) {
+	public Niveau(Jeu jeu, int num, int x, int y, Heros heros, ArrayList<Personnage> monstres, double pourcentObjectif) {
 	
 		this.heros = heros;
 		
@@ -26,7 +26,7 @@ public class Niveau {
 		}
 		
 		pourcentageObjectif = pourcentObjectif;
-		terrain = new Terrain(x, y);
+		terrain = new Terrain(jeu, x, y);
 
 	}
 	
@@ -60,13 +60,12 @@ public class Niveau {
 	
 	// Le h�ros a finit de tracer, cette m�thode d�finit les zones � remplir et les remplit
 	public void remplirTracage() {
-		// On transforme d�j� la trace par des blocs normaux
-		terrain.remplacerTracageParBloc();
 		
 		// Ici on replit � partir du dernier bloc de tra�age, mais il est envisageable de trouver une meilleure m�thode
 		
 		int[] tmpCoords;
 
+		// Curseur de bloc à récupérer dans la trace
 		int i = terrain.getTailleTrace();
 		
 		while(i > 0) {
@@ -108,7 +107,9 @@ public class Niveau {
 				}
 			}
 		}
-		
+
+		// On transforme d�j� la trace par des blocs normaux
+		terrain.remplacerTracageParBloc();
 		terrain.finaliserRemplissage();
 		
 	}
