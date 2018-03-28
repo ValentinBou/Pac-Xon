@@ -18,7 +18,7 @@ public class Trace {
 	
 	public Trace(Jeu jeu) {
 		// TODO Configurable avec conf
-		vitesseTouche = 20.0;
+		vitesseTouche = 30.0;
 		
 		this.jeu = jeu;
 	}

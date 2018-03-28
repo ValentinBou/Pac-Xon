@@ -18,7 +18,7 @@ public class MonstreBackground extends Personnage {
 
 		vitesse = 0.25;
 		coeffDirectionDepart = 0.25 * Math.PI; // Angle de départ [0*pi, 2*pi[
-		iconeName = "iconeMonstreBackground";
+		iconeName = "monstrebackground";
 		/* End Configuration monstre normal */
 		
 		directionX = vitesse * Math.cos(coeffDirectionDepart);
@@ -80,11 +80,22 @@ public class MonstreBackground extends Personnage {
 		
 		// Actions en fonction de la présence de blocs sur le trajet
 		verifierBlocs(premierX, dernierX, premierY, dernierY);
-
+		
 		/* Le monstre avance (position incrémentée) */
 		posX += directionX * elapsedTime;
 		posY += directionY * elapsedTime;
-
+		
+		if(posX <= 0.0) {
+			posX = 0.0;
+		} else if (posX >= 1.0 - ((double)largeur / largeurNiveau)) {
+			posX = 1.0 - ((double)largeur / largeurNiveau);
+		}
+		
+		if(posY <= 0.0) {
+			posY = 0.0;
+		} else if (posY >= 1.0 - ((double)hauteur / hauteurNiveau)) {
+			posY = 1.0 - ((double)hauteur / hauteurNiveau);
+		}
 	}
 	
 	// Actions en fonction de la présence de blocs sur le trajetAvec 
@@ -103,6 +114,9 @@ public class MonstreBackground extends Personnage {
 		double incrementeValeur;
 		boolean isDevieX = false;
 		boolean isDevieY = false;
+
+		// La trace a été touchée ?
+		boolean traceTouche = false;
 		
 		curseur = premierX;
 		
@@ -114,9 +128,12 @@ public class MonstreBackground extends Personnage {
 				// Action selon le bloc
 				// Non vide : rebondit
 				if( ((tmpBloc != TypeBloc.Bordure) && (tmpBloc != TypeBloc.BlocNormal))  || ( posY <= 0) || (posY >= maxPosY) ) {
-					System.out.println("case 1");
 					directionY = -directionY;
 					isDevieY = true;
+					if(tmpBloc.isTrace() && !traceTouche) {
+						traceTouche = true;
+						terrain.toucherTrace(curseur, dernierY);
+					}
 					break;
 				}
 				curseur += incrementeValeur;
@@ -128,9 +145,12 @@ public class MonstreBackground extends Personnage {
 				// Action selon le bloc
 				// Non vide : rebondit
 				if( ((tmpBloc != TypeBloc.Bordure) && (tmpBloc != TypeBloc.BlocNormal))  || ( posY <= 0) || (posY >= maxPosY) ) {
-					System.out.println("case 2");
 					directionY = -directionY;
 					isDevieY = true;
+					if(tmpBloc.isTrace() && !traceTouche) {
+						traceTouche = true;
+						terrain.toucherTrace(curseur, dernierY);
+					}
 					break;
 				}
 				curseur += incrementeValeur;
@@ -147,9 +167,12 @@ public class MonstreBackground extends Personnage {
 				// Action selon le bloc
 				// Non vide : rebondit
 				if( ((tmpBloc != TypeBloc.Bordure) && (tmpBloc != TypeBloc.BlocNormal))  || ( posX <= 0) || (posX >= maxPosX) ) {
-					System.out.println("case 3");
 					directionX = -directionX;
 					isDevieX = true;
+					if(tmpBloc.isTrace() && !traceTouche) {
+						traceTouche = true;
+						terrain.toucherTrace(dernierX, curseur);
+					}
 					break;
 				}
 				curseur += incrementeValeur;
@@ -161,9 +184,12 @@ public class MonstreBackground extends Personnage {
 				// Action selon le bloc
 				// Non vide : rebondit
 				if( ((tmpBloc != TypeBloc.Bordure) && (tmpBloc != TypeBloc.BlocNormal)) || ( posX <= 0) || ( posX >= maxPosX) ) {
-					System.out.println("case 4");
 					directionX = -directionX;
 					isDevieX = true;
+					if(tmpBloc.isTrace() && !traceTouche) {
+						traceTouche = true;
+						terrain.toucherTrace(dernierX, curseur);
+					}
 					break;
 				}
 				curseur += incrementeValeur;
@@ -178,9 +204,12 @@ public class MonstreBackground extends Personnage {
 			/* Si le monstre touche directement un coin */
 			tmpBloc = terrain.getBloc(dernierX, dernierY);
 			if( ((tmpBloc != TypeBloc.Bordure) && (tmpBloc != TypeBloc.BlocNormal)) || ( posX <= 0) || ( posX >= maxPosX) || ( posY <= 0) || ( posY >= maxPosY) ) {
-				System.out.println("case 5");
 				directionX = -directionX;
 				directionY = -directionY;
+				if(tmpBloc.isTrace() && !traceTouche) {
+					traceTouche = true;
+					terrain.toucherTrace(dernierX, dernierY);
+				}
 			}
 		}		
 	}

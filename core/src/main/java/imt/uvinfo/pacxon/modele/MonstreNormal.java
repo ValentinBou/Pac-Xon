@@ -18,7 +18,7 @@ public class MonstreNormal extends Personnage {
 
 		vitesse = 0.5;
 		coeffDirectionDepart = 0.25 * Math.PI; // Angle de départ [0*pi, 2*pi[
-		iconeName = "iconeMonstreNormal";
+		iconeName = "monstrenormal";
 		/* End Configuration monstre normal */
 		
 		directionX = vitesse * Math.cos(coeffDirectionDepart);

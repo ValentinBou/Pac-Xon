@@ -184,9 +184,9 @@ public class PacXon implements ApplicationListener {
 	        // Affichage de tous les monstres selon leur direction
 	        for(i = 0; i < niveauActuel.getNbMonstres(); i++) {
 	        	if(niveauActuel.getMonstre(i).getDirectionX() < 0.0) {
-	            	sprites.draw(textures.findRegion("Textures_64px_monstre_left"), (int)(niveauActuel.getMonstre(i).getPosX()*largeurFenetre), (int)(niveauActuel.getMonstre(i).getPosY()*hauteurFenetre), niveauActuel.getMonstre(i).getLargeur()*unitLargeur, niveauActuel.getMonstre(i).getHauteur()*unitHauteur);
+	            	sprites.draw(textures.findRegion("Textures_64px_"+niveauActuel.getMonstre(i).iconeName+"_left"), (int)(niveauActuel.getMonstre(i).getPosX()*largeurFenetre), (int)(niveauActuel.getMonstre(i).getPosY()*hauteurFenetre), niveauActuel.getMonstre(i).getLargeur()*unitLargeur, niveauActuel.getMonstre(i).getHauteur()*unitHauteur);
 	        	} else {
-	            	sprites.draw(textures.findRegion("Textures_64px_monstre_right"), (int)(niveauActuel.getMonstre(i).getPosX()*largeurFenetre), (int)(niveauActuel.getMonstre(i).getPosY()*hauteurFenetre), niveauActuel.getMonstre(i).getLargeur()*unitLargeur, niveauActuel.getMonstre(i).getHauteur()*unitHauteur);
+	            	sprites.draw(textures.findRegion("Textures_64px_"+niveauActuel.getMonstre(i).iconeName+"_right"), (int)(niveauActuel.getMonstre(i).getPosX()*largeurFenetre), (int)(niveauActuel.getMonstre(i).getPosY()*hauteurFenetre), niveauActuel.getMonstre(i).getLargeur()*unitLargeur, niveauActuel.getMonstre(i).getHauteur()*unitHauteur);
 	        	}
 	        }
 	
