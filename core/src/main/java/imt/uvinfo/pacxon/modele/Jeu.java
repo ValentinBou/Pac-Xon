@@ -12,7 +12,7 @@ public class Jeu {
 	private int curseurNiveauActuel = 0;
 	private ArrayList<Niveau> listeNiveaux;
 	
-	
+	private boolean fini = false;
 	
 	public Jeu(int nbVies) {
 		nbViesTotal = nbVies;
@@ -23,10 +23,10 @@ public class Jeu {
 		creerNiveaux();
 	}
 	
-	// Permet de générer les Niveaux
-	// Cette fonction est à modifier pour changer les niveaux, ou pour externaliser la définition de niveaux
+	// Permet de gï¿½nï¿½rer les Niveaux
+	// Cette fonction est ï¿½ modifier pour changer les niveaux, ou pour externaliser la dï¿½finition de niveaux
 	private void creerNiveaux() {
-		/* TODO : possibilité d'utiliser un fichier de configuration ici */
+		/* TODO : possibilitï¿½ d'utiliser un fichier de configuration ici */
 		ArrayList<Personnage> monstres = new ArrayList<Personnage>();
 		int defX = 40;
 		int defY = 30;
@@ -49,6 +49,15 @@ public class Jeu {
 		listeNiveaux.get(0).initier();
 	}
 	
+	public void update(float elapsedTime) {
+		if(getNiveauActuel().isFini()) {
+			// TODO : PossibilitÃ© d'afficher un Ã©cran "niveau gagnÃ©" pendant un temps
+			passerNiveau();
+		}
+		
+		getNiveauActuel().update(elapsedTime);
+	}
+	
 	public int getScore() {
 		return score;
 	}
@@ -69,13 +78,18 @@ public class Jeu {
 		return nbViesTotal;
 	}
 	
-	// Game Over
-	public boolean isFini() {
+	// Game Over plus de vies
+	public boolean isPerdu() {
 		if(nbViesRestantes <= 0) {
 			return true;
 		} else {
 			return false;
 		}
+	}
+	
+	// Game Over gagnÃ©
+	public boolean isFini() {
+		return fini;
 	}
 
 	public Niveau getNiveauActuel() {
@@ -83,7 +97,11 @@ public class Jeu {
 	}
 	
 	public void passerNiveau() {
-		curseurNiveauActuel++;
-		getNiveauActuel().initier();
+		if(curseurNiveauActuel < (listeNiveaux.size() - 1)) {
+			curseurNiveauActuel++;
+			getNiveauActuel().initier();
+		} else {
+			fini = true;
+		}
 	}
 }

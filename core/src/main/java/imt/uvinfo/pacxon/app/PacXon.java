@@ -3,9 +3,11 @@ package imt.uvinfo.pacxon.app;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -26,20 +28,21 @@ public class PacXon implements ApplicationListener {
     private ShapeRenderer shapes;
     private float elapsed;
     
+    private BitmapFont policeNormale;
     
     private TextureAtlas textures;
 
-    // Taille fenêtre
+    // Taille fenï¿½tre
     int largeurFenetre = 800;
     int hauteurFenetre = 600;
-    // Accès au modele
+    // Accï¿½s au modele
     Jeu monJeu;
-    // Garde en mémoire le sprite du héros, à afficher lorsque celui-ci ne bouge plus
+    // Garde en mï¿½moire le sprite du hï¿½ros, ï¿½ afficher lorsque celui-ci ne bouge plus
     String dernierSpriteHeros;
 
     @Override
     public void create() {
-        // le viewport gère la caméra quand la fenêtre change de taille
+        // le viewport gï¿½re la camï¿½ra quand la fenï¿½tre change de taille
         viewport = new ScalingViewport(Scaling.fit, largeurFenetre, hauteurFenetre);
 
         // prise en compte de la transparence des couleurs
@@ -48,6 +51,8 @@ public class PacXon implements ApplicationListener {
         // rendu en batches
         sprites = new SpriteBatch();
         shapes = new ShapeRenderer();
+        policeNormale = new BitmapFont();
+        policeNormale.setColor(Color.WHITE);
         
         /* Init jeu */
         monJeu = new Jeu(3);
@@ -55,7 +60,7 @@ public class PacXon implements ApplicationListener {
         // Chargement des textures
         textures = new TextureAtlas(Gdx.files.internal("Textures_64px.atlas"));
     	
-        // Init sauvegarde du dernier état du héros (regarde par défaut vers la droite)
+        // Init sauvegarde du dernier ï¿½tat du hï¿½ros (regarde par dï¿½faut vers la droite)
     	dernierSpriteHeros = "Textures_64px_heros_right";
     	
     }
@@ -65,119 +70,134 @@ public class PacXon implements ApplicationListener {
     	
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
 
-        // Temps passé total
+        // Temps passï¿½ total
         elapsed += Gdx.graphics.getDeltaTime();
         
-        // Récupère le niveau
-        Niveau niveauActuel = monJeu.getNiveauActuel();
-        
-        // Récupérer le héros
-        Heros heros = monJeu.getNiveauActuel().getHeros();
-        
-        // Gestion des touches fléchées (direction du heros)
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
-        	heros.setFlagArrowRight();
-        } else {
-        	heros.unSetFlagArrowRight();
-        }
-        
-        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
-        	heros.setFlagArrowUp();
-        } else {
-        	heros.unSetFlagArrowUp();
-        }
-        
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
-        	heros.setFlagArrowLeft();
-        } else {
-        	heros.unSetFlagArrowLeft();
-        }
-        
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
-        	heros.setFlagArrowDown();
-        } else {
-        	heros.unSetFlagArrowDown();
-        }
-
-        int i = 0;
-        int j = 0;
-        int totalLargeur = niveauActuel.getTerrain().getLargeur();
-        int totalHauteur = niveauActuel.getTerrain().getHauteur();
-    	int unitLargeur = largeurFenetre/totalLargeur;
-        int unitHauteur = hauteurFenetre/totalHauteur;
-        
-        // Coloration du fond de la fenêtre
+        // Coloration du fond de la fenï¿½tre
         Gdx.gl.glClearColor(0, 0.1f, 0.1f, 1);
         Gdx.gl.glClear(GL30.GL_COLOR_BUFFER_BIT);
-
-        shapes.begin(ShapeRenderer.ShapeType.Line);
-        //shapes.setColor(0, 0.5f, 1, 0.3f);
-        //shapes.rect(10, 10, 780, 580);
-        // Pas de formes à créer
-        shapes.end();
-
-        sprites.setProjectionMatrix(viewport.getCamera().combined);
-        sprites.begin();
-        TypeBloc tmpBloc = null;
-        // Pour chaque bloc du terrain
-        for(i = 0; i < totalLargeur; i++) {
-        	for(j = 0; j < totalHauteur; j++) {
-        		// Récupération du type du bloc
-            	tmpBloc = niveauActuel.getTerrain().getBloc(i, j);
-            	// Affichage de l'image du bloc selon son type
-        		if(tmpBloc == TypeBloc.Bordure) {
-        			sprites.draw(textures.findRegion("Textures_64px_bordure"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
-        		} else if(tmpBloc == TypeBloc.BlocNormal) {
-        			sprites.draw(textures.findRegion("Textures_64px_blocnormal"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
-        		} else if(tmpBloc == TypeBloc.Vide){
-        			sprites.draw(textures.findRegion("Textures_64px_vide"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
-        		} else if(tmpBloc == TypeBloc.Trace){
-        			sprites.draw(textures.findRegion("Textures_64px_trace"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
-        		} else if(tmpBloc == TypeBloc.TraceTouche){
-        			sprites.draw(textures.findRegion("Textures_64px_tracetouche"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
-        		} else {
-        			// Bloc inconnu
-        			sprites.draw(textures.findRegion("Textures_64px_none"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
-        		}
-        		
+        
+        if(monJeu.isFini() || monJeu.isPerdu()) {
+        	// Jeu fini
+        	// TODO : Centrer le texte, et pourquoi pas crÃ©er sa police avec classe police, images pour chaque lettre, getstring etc...
+        	sprites.begin();
+        	if(monJeu.isFini()) {
+        		policeNormale.draw(sprites, "Game Over : You won!", largeurFenetre/2, hauteurFenetre/2);
+        	} else if(monJeu.isPerdu()) {
+        		policeNormale.draw(sprites, "Game Over : You died!", largeurFenetre/2, hauteurFenetre/2);
         	}
+            sprites.end();
         	
-        }
-        
-        // Affichage du héros selon sa direction
-        if(heros.getDirectionY() > 0.0) {
-        	sprites.draw(textures.findRegion("Textures_64px_heros_up"), (int)(heros.getPosX()*largeurFenetre), (int)(heros.getPosY()*hauteurFenetre), unitLargeur, unitHauteur);
-        	dernierSpriteHeros = "Textures_64px_heros_up";
-        } else if(heros.getDirectionY() < 0.0) {
-        	sprites.draw(textures.findRegion("Textures_64px_heros_down"), (int)(heros.getPosX()*largeurFenetre), (int)(heros.getPosY()*hauteurFenetre), unitLargeur, unitHauteur);
-        	dernierSpriteHeros = "Textures_64px_heros_down";
-        } else if(heros.getDirectionX() > 0.0) {
-        	sprites.draw(textures.findRegion("Textures_64px_heros_right"), (int)(heros.getPosX()*largeurFenetre), (int)(heros.getPosY()*hauteurFenetre), unitLargeur, unitHauteur);
-        	dernierSpriteHeros = "Textures_64px_heros_right";
-        } else if(heros.getDirectionX() < 0.0) {
-        	sprites.draw(textures.findRegion("Textures_64px_heros_left"), (int)(heros.getPosX()*largeurFenetre), (int)(heros.getPosY()*hauteurFenetre), unitLargeur, unitHauteur);
-        	dernierSpriteHeros = "Textures_64px_heros_left";
         } else {
-        	// Le héros ne bouge pas, on continue d'afficher selon le sens précédent
-        	sprites.draw(textures.findRegion(dernierSpriteHeros), (int)(heros.getPosX()*largeurFenetre), (int)(heros.getPosY()*hauteurFenetre), unitLargeur, unitHauteur);
-        }
-        
-        // Affichage de tous les monstres selon leur direction
-        for(i = 0; i < niveauActuel.getNbMonstres(); i++) {
-        	if(niveauActuel.getMonstre(i).getDirectionX() < 0.0) {
-            	sprites.draw(textures.findRegion("Textures_64px_monstre_left"), (int)(niveauActuel.getMonstre(i).getPosX()*largeurFenetre), (int)(niveauActuel.getMonstre(i).getPosY()*hauteurFenetre), niveauActuel.getMonstre(i).getLargeur()*unitLargeur, niveauActuel.getMonstre(i).getHauteur()*unitHauteur);
-        	} else {
-            	sprites.draw(textures.findRegion("Textures_64px_monstre_right"), (int)(niveauActuel.getMonstre(i).getPosX()*largeurFenetre), (int)(niveauActuel.getMonstre(i).getPosY()*hauteurFenetre), niveauActuel.getMonstre(i).getLargeur()*unitLargeur, niveauActuel.getMonstre(i).getHauteur()*unitHauteur);
-        	}
-        }
-
-        sprites.end();
-        
-        /* On met à jour le niveau, la màj s'affichera à la frame suivante */
-        /* La mise à jour ne se fait pas si le temps est trop grand, pour éviter des erreurs (ici 0.5 seconde : 2fps minimum) */
-        /* TODO : Possibilité de créer un thread qui mettra à jour lui-même l'affichage, pour éviter des problèmes lorsqu'il n'y a pas de render */
-        if(Gdx.graphics.getDeltaTime() <= 0.5) {
-        	niveauActuel.update(Gdx.graphics.getDeltaTime());
+        	// Affichage du jeu
+        	
+	        // Rï¿½cupï¿½re le niveau
+	        Niveau niveauActuel = monJeu.getNiveauActuel();
+	        
+	        // Rï¿½cupï¿½rer le hï¿½ros
+	        Heros heros = monJeu.getNiveauActuel().getHeros();
+	        
+	        // Gestion des touches flï¿½chï¿½es (direction du heros)
+	        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+	        	heros.setFlagArrowRight();
+	        } else {
+	        	heros.unSetFlagArrowRight();
+	        }
+	        
+	        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+	        	heros.setFlagArrowUp();
+	        } else {
+	        	heros.unSetFlagArrowUp();
+	        }
+	        
+	        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+	        	heros.setFlagArrowLeft();
+	        } else {
+	        	heros.unSetFlagArrowLeft();
+	        }
+	        
+	        if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+	        	heros.setFlagArrowDown();
+	        } else {
+	        	heros.unSetFlagArrowDown();
+	        }
+	
+	        int i = 0;
+	        int j = 0;
+	        int totalLargeur = niveauActuel.getTerrain().getLargeur();
+	        int totalHauteur = niveauActuel.getTerrain().getHauteur();
+	    	int unitLargeur = largeurFenetre/totalLargeur;
+	        int unitHauteur = hauteurFenetre/totalHauteur;
+	
+	        shapes.begin(ShapeRenderer.ShapeType.Line);
+	        //shapes.setColor(0, 0.5f, 1, 0.3f);
+	        //shapes.rect(10, 10, 780, 580);
+	        // Pas de formes ï¿½ crï¿½er
+	        shapes.end();
+	
+	        sprites.setProjectionMatrix(viewport.getCamera().combined);
+	        sprites.begin();
+	        TypeBloc tmpBloc = null;
+	        // Pour chaque bloc du terrain
+	        for(i = 0; i < totalLargeur; i++) {
+	        	for(j = 0; j < totalHauteur; j++) {
+	        		// Rï¿½cupï¿½ration du type du bloc
+	            	tmpBloc = niveauActuel.getTerrain().getBloc(i, j);
+	            	// Affichage de l'image du bloc selon son type
+	        		if(tmpBloc == TypeBloc.Bordure) {
+	        			sprites.draw(textures.findRegion("Textures_64px_bordure"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
+	        		} else if(tmpBloc == TypeBloc.BlocNormal) {
+	        			sprites.draw(textures.findRegion("Textures_64px_blocnormal"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
+	        		} else if(tmpBloc == TypeBloc.Vide){
+	        			sprites.draw(textures.findRegion("Textures_64px_vide"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
+	        		} else if(tmpBloc == TypeBloc.Trace){
+	        			sprites.draw(textures.findRegion("Textures_64px_trace"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
+	        		} else if(tmpBloc == TypeBloc.TraceTouche){
+	        			sprites.draw(textures.findRegion("Textures_64px_tracetouche"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
+	        		} else {
+	        			// Bloc inconnu
+	        			sprites.draw(textures.findRegion("Textures_64px_none"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
+	        		}
+	        		
+	        	}
+	        	
+	        }
+	        
+	        // Affichage du hï¿½ros selon sa direction
+	        if(heros.getDirectionY() > 0.0) {
+	        	sprites.draw(textures.findRegion("Textures_64px_heros_up"), (int)(heros.getPosX()*largeurFenetre), (int)(heros.getPosY()*hauteurFenetre), unitLargeur, unitHauteur);
+	        	dernierSpriteHeros = "Textures_64px_heros_up";
+	        } else if(heros.getDirectionY() < 0.0) {
+	        	sprites.draw(textures.findRegion("Textures_64px_heros_down"), (int)(heros.getPosX()*largeurFenetre), (int)(heros.getPosY()*hauteurFenetre), unitLargeur, unitHauteur);
+	        	dernierSpriteHeros = "Textures_64px_heros_down";
+	        } else if(heros.getDirectionX() > 0.0) {
+	        	sprites.draw(textures.findRegion("Textures_64px_heros_right"), (int)(heros.getPosX()*largeurFenetre), (int)(heros.getPosY()*hauteurFenetre), unitLargeur, unitHauteur);
+	        	dernierSpriteHeros = "Textures_64px_heros_right";
+	        } else if(heros.getDirectionX() < 0.0) {
+	        	sprites.draw(textures.findRegion("Textures_64px_heros_left"), (int)(heros.getPosX()*largeurFenetre), (int)(heros.getPosY()*hauteurFenetre), unitLargeur, unitHauteur);
+	        	dernierSpriteHeros = "Textures_64px_heros_left";
+	        } else {
+	        	// Le hï¿½ros ne bouge pas, on continue d'afficher selon le sens prï¿½cï¿½dent
+	        	sprites.draw(textures.findRegion(dernierSpriteHeros), (int)(heros.getPosX()*largeurFenetre), (int)(heros.getPosY()*hauteurFenetre), unitLargeur, unitHauteur);
+	        }
+	        
+	        // Affichage de tous les monstres selon leur direction
+	        for(i = 0; i < niveauActuel.getNbMonstres(); i++) {
+	        	if(niveauActuel.getMonstre(i).getDirectionX() < 0.0) {
+	            	sprites.draw(textures.findRegion("Textures_64px_monstre_left"), (int)(niveauActuel.getMonstre(i).getPosX()*largeurFenetre), (int)(niveauActuel.getMonstre(i).getPosY()*hauteurFenetre), niveauActuel.getMonstre(i).getLargeur()*unitLargeur, niveauActuel.getMonstre(i).getHauteur()*unitHauteur);
+	        	} else {
+	            	sprites.draw(textures.findRegion("Textures_64px_monstre_right"), (int)(niveauActuel.getMonstre(i).getPosX()*largeurFenetre), (int)(niveauActuel.getMonstre(i).getPosY()*hauteurFenetre), niveauActuel.getMonstre(i).getLargeur()*unitLargeur, niveauActuel.getMonstre(i).getHauteur()*unitHauteur);
+	        	}
+	        }
+	
+	        sprites.end();
+	        
+	        /* On met ï¿½ jour le niveau, la mï¿½j s'affichera ï¿½ la frame suivante */
+	        /* La mise ï¿½ jour ne se fait pas si le temps est trop grand, pour ï¿½viter des erreurs (ici 0.5 seconde : 2fps minimum) */
+	        /* TODO : Possibilitï¿½ de crï¿½er un thread qui mettra ï¿½ jour lui-mï¿½me l'affichage, pour ï¿½viter des problï¿½mes lorsqu'il n'y a pas de render */
+	        if(Gdx.graphics.getDeltaTime() <= 0.5) {
+	        	monJeu.update(Gdx.graphics.getDeltaTime());
+	        }
         }
         
     }

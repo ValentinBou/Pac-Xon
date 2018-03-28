@@ -8,12 +8,19 @@ public class Terrain {
 	private int largeur;
 	private int hauteur;
 	
+	private int nbBlocsRemplis;
+	private int nbBlocsTotal;
+	
 	public Terrain(int x, int y){
 		int i, j;
 		
 		blocs = new TypeBloc[x][y];
 		largeur = x;
 		hauteur = y;
+		
+		nbBlocsRemplis = 0;
+		// Nb blocs (bordures exclues !)
+		nbBlocsTotal = (x-2)*(y-2);
 		
 		/* G�n�ration des blocs */
 		/* TODO : Possibilit� d'utiliser une "map" (un fichier de conf) */
@@ -36,6 +43,7 @@ public class Terrain {
 			for(j = 0; j < hauteur; j++) {
 				if(blocs[i][j] == TypeBloc.Trace || blocs[i][j] == TypeBloc.TraceTouche) {
 					blocs[i][j] = TypeBloc.BlocNormal;
+					nbBlocsRemplis++;
 				}
 			}
 		}
@@ -75,6 +83,7 @@ public class Terrain {
 			for(j = 0; j < hauteur; j++) {
 				if(blocs[i][j] == TypeBloc.TmpRempliValide) {
 					blocs[i][j] = TypeBloc.BlocNormal;
+					nbBlocsRemplis++;
 				} else if(blocs[i][j] == TypeBloc.TmpRempliAnnule) {
 					blocs[i][j] = TypeBloc.Vide;
 				}
@@ -88,6 +97,11 @@ public class Terrain {
 	
 	public int getHauteur() {
 		return hauteur;
+	}
+	
+	public double getPourcentRemplissage() {
+		System.out.println((double)nbBlocsRemplis/(double)nbBlocsTotal);
+		return ((double)nbBlocsRemplis/(double)nbBlocsTotal);
 	}
 	
 	// Donne la coordonn�e du terrain enti�re correspondante � la coordonn�e flottante

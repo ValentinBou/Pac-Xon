@@ -85,8 +85,9 @@ public class MonstreNormal extends Personnage {
 	
 	// Actions en fonction de la présence de blocs sur le trajet
 	private void verifierBlocs(double premierX, double dernierX, double premierY, double dernierY) {
-		int largeurNiveau = this.jeu.getNiveauActuel().getTerrain().getLargeur();
-		int hauteurNiveau = this.jeu.getNiveauActuel().getTerrain().getHauteur();
+		Terrain terrain = this.jeu.getNiveauActuel().getTerrain();
+		int largeurNiveau = terrain.getLargeur();
+		int hauteurNiveau = terrain.getHauteur();
 		double largeurUniteBloc = 1.0 / largeurNiveau;
 		double hauteurUniteBloc = 1.0 / hauteurNiveau;
 		double maxPosX = 1.0 - ((double)largeur / largeurNiveau);
@@ -105,7 +106,7 @@ public class MonstreNormal extends Personnage {
 		if(directionX < 0.0) {
 			incrementeValeur = -largeurUniteBloc;
 			while((curseur >= (dernierX + largeurUniteBloc)) && (curseur >= (0.0))) {
-				tmpBloc = this.jeu.getNiveauActuel().getTerrain().getBloc(curseur, dernierY);
+				tmpBloc = terrain.getBloc(curseur, dernierY);
 				// Action selon le bloc
 				// Non vide : rebondit
 				if(tmpBloc != TypeBloc.Vide) {
@@ -118,7 +119,7 @@ public class MonstreNormal extends Personnage {
 		} else {
 			incrementeValeur = largeurUniteBloc;
 			while((curseur <= (dernierX - largeurUniteBloc)) && (curseur <= (maxPosX))) {
-				tmpBloc = this.jeu.getNiveauActuel().getTerrain().getBloc(curseur, dernierY);
+				tmpBloc = terrain.getBloc(curseur, dernierY);
 				// Action selon le bloc
 				// Non vide : rebondit
 				if(tmpBloc != TypeBloc.Vide) {
@@ -136,7 +137,7 @@ public class MonstreNormal extends Personnage {
 		if(directionY < 0.0) {
 			incrementeValeur = -hauteurUniteBloc;
 			while((curseur >= (dernierY + hauteurUniteBloc)) && (curseur >= (0.0))) {
-				tmpBloc = this.jeu.getNiveauActuel().getTerrain().getBloc(dernierX, curseur);
+				tmpBloc = terrain.getBloc(dernierX, curseur);
 				// Action selon le bloc
 				// Non vide : rebondit
 				if(tmpBloc != TypeBloc.Vide) {
@@ -149,7 +150,7 @@ public class MonstreNormal extends Personnage {
 		} else {
 			incrementeValeur = hauteurUniteBloc;
 			while((curseur <= (dernierY - hauteurUniteBloc)) && (curseur <= (maxPosY))) {
-				tmpBloc = this.jeu.getNiveauActuel().getTerrain().getBloc(dernierX, curseur);
+				tmpBloc = terrain.getBloc(dernierX, curseur);
 				// Action selon le bloc
 				// Non vide : rebondit
 				if(tmpBloc != TypeBloc.Vide) {
@@ -165,7 +166,7 @@ public class MonstreNormal extends Personnage {
 
 		if(!isDevieX && !isDevieY) {
 			/* Si le monstre touche directement un coin */
-			tmpBloc = this.jeu.getNiveauActuel().getTerrain().getBloc(dernierX, dernierY);
+			tmpBloc = terrain.getBloc(dernierX, dernierY);
 			if(tmpBloc != TypeBloc.Vide) {
 				directionX = -directionX;
 				directionY = -directionY;

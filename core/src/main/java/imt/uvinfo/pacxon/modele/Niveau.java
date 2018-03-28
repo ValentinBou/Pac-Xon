@@ -15,9 +15,6 @@ public class Niveau {
 	// Pourcentage de blocs � remplir pour gagner le niveau
 	private double pourcentageObjectif;
 	
-	private int nbBlocsRemplis = 0;
-	private int nbBlocsTotal;
-	
 	public Niveau(int num, int x, int y, Heros heros, ArrayList<Personnage> monstres, double pourcentObjectif) {
 	
 		this.heros = heros;
@@ -29,7 +26,6 @@ public class Niveau {
 		}
 		
 		pourcentageObjectif = pourcentObjectif;
-		nbBlocsTotal = x*y;
 		terrain = new Terrain(x, y);
 
 	}
@@ -50,6 +46,14 @@ public class Niveau {
 		heros.update(elapsedTime);
 		for(i = 0; i < monstres.size(); i++) {
 			monstres.get(i).update(elapsedTime);
+		}
+	}
+	
+	protected boolean isFini() {
+		if(terrain.getPourcentRemplissage() >= pourcentageObjectif) {
+			return true;
+		} else {
+			return false;
 		}
 	}
 	
@@ -213,9 +217,5 @@ public class Niveau {
 
 	public double getPourcentageObjectif() {
 		return pourcentageObjectif;
-	}
-	
-	public double getPourcentageRempli() {
-		return nbBlocsRemplis/nbBlocsTotal;
 	}
 }
