@@ -47,6 +47,7 @@ public class Niveau {
 		for(i = 0; i < monstres.size(); i++) {
 			monstres.get(i).update(elapsedTime);
 		}
+		terrain.update(elapsedTime);
 	}
 	
 	protected boolean isFini() {
@@ -58,7 +59,7 @@ public class Niveau {
 	}
 	
 	// Le h�ros a finit de tracer, cette m�thode d�finit les zones � remplir et les remplit
-	public void remplirTracage(ArrayDeque<int[]> pileTrace) {
+	public void remplirTracage() {
 		// On transforme d�j� la trace par des blocs normaux
 		terrain.remplacerTracageParBloc();
 		
@@ -66,8 +67,11 @@ public class Niveau {
 		
 		int[] tmpCoords;
 
-		while(!pileTrace.isEmpty()) {
-			tmpCoords = pileTrace.pop();
+		int i = terrain.getTailleTrace();
+		
+		while(i > 0) {
+			i--;
+			tmpCoords = terrain.getBlocTrace(i);
 			
 			if(terrain.getBloc(tmpCoords[0], tmpCoords[1] + 1) == TypeBloc.Vide) {
 				// Le bloc de d�part est bien vide
@@ -188,7 +192,7 @@ public class Niveau {
 	}
 	
 	// V�rifie la pr�sence d'un monstre sur un bloc
-	private boolean isMonstreSurBloc(int x, int y) {
+	protected boolean isMonstreSurBloc(int x, int y) {
 		int i = 0;
 		// V�rifie pour tous les monstres
 		for(i = 0; i < monstres.size(); i++) {

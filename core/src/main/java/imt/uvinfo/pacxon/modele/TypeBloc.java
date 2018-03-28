@@ -17,4 +17,12 @@ public enum TypeBloc {
 		}
 	}
 	
+	protected boolean isTrace() {
+		if((this == Trace) || (this == TraceTouche)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+	
 }

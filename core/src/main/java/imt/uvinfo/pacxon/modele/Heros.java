@@ -4,8 +4,6 @@ import java.util.ArrayDeque;
 
 public class Heros extends Personnage {
 	private boolean isTracing = false;
-	// Pile des coordonnées des blocs tracés
-	private ArrayDeque<int[]> pileTrace = new ArrayDeque<int[]>();
 	
 	// Position de départ
 	private int coordonneeSpawnX = 0;
@@ -26,7 +24,7 @@ public class Heros extends Personnage {
 		
 		/* Configuration héros */
 		/* TODO : possibilité d'utiliser un fichier de config */
-		apparu = true;
+		apparu = false;
 		largeur = 1;
 		hauteur = 1;
 		coordonneeSpawnX = 0;
@@ -53,6 +51,13 @@ public class Heros extends Personnage {
 		posX = (double) ((coordonneeSpawnX + largeurNiveau) % largeurNiveau) / largeurNiveau;
 		posY = (double) ((coordonneeSpawnY + hauteurNiveau) % hauteurNiveau) / hauteurNiveau;
 		
+		precedentX = 0.0;
+		precedentY = 0.0;
+		
+		isTracing = false;
+		this.jeu.getNiveauActuel().getTerrain().deleteTracage();
+		
+		apparu = true;
 		// Apparait toujours avec succes
 		return true;
 	}
@@ -198,7 +203,7 @@ public class Heros extends Personnage {
 				directionY = directionprecedenteY;
 			}
 		}
-		
+	
 		
 		/* On avance et bloque aux limites du terrain */
 		if(blocSuivantX < 0.0) {
@@ -234,16 +239,12 @@ public class Heros extends Personnage {
 				TypeBloc blocPrecedent = terrain.getBloc(precedentX, precedentY);
 				if (blocPrecedent == TypeBloc.Vide) {
 					// Remplit le bloc précédent en "Trace"
-					terrain.setBloc(TypeBloc.Trace, precedentX, precedentY);
-					// Empile le bloc tracé
-					int tmpCoords[] = {terrain.getXint(precedentX), terrain.getYint(precedentY)};
-					pileTrace.add(tmpCoords);
+					terrain.tracer(precedentX, precedentY);
 				}
 				
 				if((blocActuel == TypeBloc.BlocNormal) || (blocActuel == TypeBloc.Bordure)) {
 					// Il atteint un bloc rempli : il remplit le terrain et désactive son mode tracage
-					jeu.getNiveauActuel().remplirTracage(pileTrace);
-					pileTrace.clear();
+					jeu.getNiveauActuel().remplirTracage();
 					this.isTracing = false;
 				}
 				
@@ -253,6 +254,31 @@ public class Heros extends Personnage {
 		
 		precedentX = blocActuelX;
 		precedentY = blocActuelY;
+		
+		// Vérification de la présence de monstre(s) sur la case actuelle
+		if(jeu.getNiveauActuel().isMonstreSurBloc(terrain.getXint(blocActuelX), terrain.getYint(blocActuelY))) {
+			decede();
+			return;
+		}
+		
+		// Vérification de la présence de monstre(s) sur la case sur laquelle entre le héros
+		if(jeu.getNiveauActuel().isMonstreSurBloc(terrain.getXint(blocSuivantX), terrain.getYint(blocSuivantY))) {
+			decede();
+			return;
+		}
+		
+		TypeBloc blocSuivant = terrain.getBloc(blocSuivantX, blocSuivantY);
+		// Vérification de la présence de bloc "Trace" sur la case sur laquelle entre le héros
+		if(blocSuivant.isTrace()) {
+			decede();
+			return;
+		}
+	}
+	
+	public void decede() {
+		// Le héros meurt. RIP.
+		essayerDApparaitre();
+		jeu.perdreVie();
 	}
 	
 	public void setFlagArrowRight() {

@@ -71,7 +71,11 @@ public class Jeu {
 	}
 
 	public void perdreVie() {
-		this.nbViesRestantes--;
+		if(nbViesRestantes <= 0) {
+			nbViesRestantes = 0;
+		} else {
+			nbViesRestantes--;
+		}
 	}
 
 	public int getNbViesTotal() {

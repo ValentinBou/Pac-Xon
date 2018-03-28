@@ -82,9 +82,9 @@ public class PacXon implements ApplicationListener {
         	// TODO : Centrer le texte, et pourquoi pas créer sa police avec classe police, images pour chaque lettre, getstring etc...
         	sprites.begin();
         	if(monJeu.isFini()) {
-        		policeNormale.draw(sprites, "Game Over : You won!", largeurFenetre/2, hauteurFenetre/2);
+        		policeNormale.draw(sprites, "You won!", largeurFenetre/2, hauteurFenetre/2);
         	} else if(monJeu.isPerdu()) {
-        		policeNormale.draw(sprites, "Game Over : You died!", largeurFenetre/2, hauteurFenetre/2);
+        		policeNormale.draw(sprites, "You died :'(", largeurFenetre/2, hauteurFenetre/2);
         	}
             sprites.end();
         	
