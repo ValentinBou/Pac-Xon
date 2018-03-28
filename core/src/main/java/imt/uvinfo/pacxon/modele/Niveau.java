@@ -8,11 +8,11 @@ public class Niveau {
 	// Terrain du niveau
 	private Terrain terrain;
 	
-	// Entités
+	// Entitï¿½s
 	private Heros heros;
 	private ArrayList<Personnage> monstres;
 	
-	// Pourcentage de blocs à remplir pour gagner le niveau
+	// Pourcentage de blocs ï¿½ remplir pour gagner le niveau
 	private double pourcentageObjectif;
 	
 	private int nbBlocsRemplis = 0;
@@ -22,7 +22,7 @@ public class Niveau {
 	
 		this.heros = heros;
 		
-		// Récupération des monstres données par le Jeu
+		// Rï¿½cupï¿½ration des monstres donnï¿½es par le Jeu
 		this.monstres = new ArrayList<Personnage>();
 		while(monstres.size() > 0) {
 			this.monstres.add(monstres.remove(0));
@@ -34,8 +34,8 @@ public class Niveau {
 
 	}
 	
-	// Cette méthode doit etre executée une fois que le niveau est utilisé
-	// Initialise les entités / Personnages
+	// Cette mï¿½thode doit etre executï¿½e une fois que le niveau est utilisï¿½
+	// Initialise les entitï¿½s / Personnages
 	protected void initier() {
 		int i = 0;
 		heros.initier();
@@ -44,7 +44,7 @@ public class Niveau {
 		}
 	}
 	
-	// Met à jour le niveau à chaque frame
+	// Met ï¿½ jour le niveau ï¿½ chaque frame
 	public void update(float elapsedTime) {
 		int i = 0;
 		heros.update(elapsedTime);
@@ -53,59 +53,66 @@ public class Niveau {
 		}
 	}
 	
-	// Le héros a finit de tracer, cette méthode définit les zones à remplir et les remplit
-	public void remplirTracage(int xTraceDepart, int yTraceDepart) {
-		// On transforme déjà la trace par des blocs normaux
+	// Le hï¿½ros a finit de tracer, cette mï¿½thode dï¿½finit les zones ï¿½ remplir et les remplit
+	public void remplirTracage(ArrayDeque<int[]> pileTrace) {
+		// On transforme dï¿½jï¿½ la trace par des blocs normaux
 		terrain.remplacerTracageParBloc();
 		
-		// Ici on replit à partir du dernier bloc de traçage, mais il est envisageable de trouver une meilleure méthode
+		// Ici on replit ï¿½ partir du dernier bloc de traï¿½age, mais il est envisageable de trouver une meilleure mï¿½thode
+		
+		int[] tmpCoords;
 
-		if(terrain.getBloc(xTraceDepart, yTraceDepart + 1) == TypeBloc.Vide) {
-			// Le bloc de départ est bien vide
-			if(parcourirZone(xTraceDepart, yTraceDepart + 1)) {
-				// La zone doit être remplie (ne contient pas de monstre)
-				terrain.remplacerTracageParBloc();
-			} else {
-				// La zone ne doit pas être remplie
-				terrain.remplacerTracageParVide();
+		while(!pileTrace.isEmpty()) {
+			tmpCoords = pileTrace.pop();
+			
+			if(terrain.getBloc(tmpCoords[0], tmpCoords[1] + 1) == TypeBloc.Vide) {
+				// Le bloc de dï¿½part est bien vide
+				if(parcourirZone(tmpCoords[0], tmpCoords[1] + 1)) {
+					// La zone doit ï¿½tre remplie (ne contient pas de monstre)
+					terrain.validerRemplissage();
+				} else {
+					// La zone ne doit pas ï¿½tre remplie
+					terrain.annulerRemplissage();
+				}
+			}
+			
+			if(terrain.getBloc(tmpCoords[0], tmpCoords[1] - 1) == TypeBloc.Vide) {
+				if(parcourirZone(tmpCoords[0], tmpCoords[1] - 1)) {
+					terrain.validerRemplissage();
+				} else {
+					terrain.annulerRemplissage();
+				}
+			}
+			
+			if(terrain.getBloc(tmpCoords[0] + 1, tmpCoords[1]) == TypeBloc.Vide) {
+				if(parcourirZone(tmpCoords[0] + 1, tmpCoords[1])) {
+					terrain.validerRemplissage();
+				} else {
+					terrain.annulerRemplissage();
+				}
+			}
+			
+			if(terrain.getBloc(tmpCoords[0] - 1, tmpCoords[1]) == TypeBloc.Vide) {
+				if(parcourirZone(tmpCoords[0] - 1, tmpCoords[1])) {
+					terrain.validerRemplissage();
+				} else {
+					terrain.annulerRemplissage();
+				}
 			}
 		}
 		
-		if(terrain.getBloc(xTraceDepart, yTraceDepart - 1) == TypeBloc.Vide) {
-			if(parcourirZone(xTraceDepart, yTraceDepart - 1)) {
-				terrain.remplacerTracageParBloc();
-			} else {
-				terrain.remplacerTracageParVide();
-			}
-		}
-		
-		if(terrain.getBloc(xTraceDepart + 1, yTraceDepart) == TypeBloc.Vide) {
-			if(parcourirZone(xTraceDepart + 1, yTraceDepart)) {
-				terrain.remplacerTracageParBloc();
-			} else {
-				terrain.remplacerTracageParVide();
-			}
-		}
-		
-		if(terrain.getBloc(xTraceDepart - 1, yTraceDepart) == TypeBloc.Vide) {
-			if(parcourirZone(xTraceDepart - 1, yTraceDepart)) {
-				terrain.remplacerTracageParBloc();
-			} else {
-				terrain.remplacerTracageParVide();
-			}
-		}
-		
+		terrain.finaliserRemplissage();
 		
 	}
 	
-	// Vérification de la présence de monstre / remplissage de blocs "Vide" en blocs "Tracage"
-	// Algorithme basé sur "http://raphaello.univ-fcomte.fr/IG/Algorithme/Algorithmique.htm#remplissage"
+	// Vï¿½rification de la prï¿½sence de monstre / remplissage de blocs "Vide" en blocs "Tracage"
+	// Algorithme basï¿½ sur "http://raphaello.univ-fcomte.fr/IG/Algorithme/Algorithmique.htm#remplissage"
 	private boolean parcourirZone(int xDepart, int yDepart) {
 		ArrayDeque<int[]> pile = new ArrayDeque<int[]>();
 		int[] tmpCase, leftCase, rightCase;
 		int x, y;
 		
-		// Le bloc de départ contient un monstre ou n'est pas vide : pas de remplissage
+		// Le bloc de dï¿½part contient un monstre ou n'est pas vide : pas de remplissage
 		if(isMonstreSurBloc(xDepart, yDepart)) {
 			return false;
 		} else if(terrain.getBloc(xDepart, yDepart) != TypeBloc.Vide) {
@@ -120,49 +127,49 @@ public class Niveau {
 		while(!pile.isEmpty()) {
 			tmpCase = pile.remove();
 			
-			if(terrain.getBloc(tmpCase[0], tmpCase[1]) == TypeBloc.Vide) {
-				// On récupère les blocs les plus à gauche et le plus à droite du bloc dépilé
+			if(terrain.getBloc(tmpCase[0], tmpCase[1]).isVide()) {
+				// On rï¿½cupï¿½re les blocs les plus ï¿½ gauche et le plus ï¿½ droite du bloc dï¿½pilï¿½
 				leftCase = new int[2];
 				leftCase[0] = tmpCase[0];
 				leftCase[1] = tmpCase[1];
 				rightCase = new int[2];
 				rightCase[0] = tmpCase[0];
 				rightCase[1] = tmpCase[1];
-				while(terrain.getBloc(leftCase[0] - 1, leftCase[1]) == TypeBloc.Vide) {
+				while(terrain.getBloc(leftCase[0] - 1, leftCase[1]).isVide()) {
 					leftCase[0]--;
 				}
-				while(terrain.getBloc(rightCase[0] + 1, rightCase[1]) == TypeBloc.Vide) {
+				while(terrain.getBloc(rightCase[0] + 1, rightCase[1]).isVide()) {
 					rightCase[0]++;
 				}
 				y = tmpCase[1];
-				// Pour chaque bloc du plus à gauche au plus à droite
+				// Pour chaque bloc du plus ï¿½ gauche au plus ï¿½ droite
 				for(x = leftCase[0]; x <= rightCase[0]; x++) {
 					if(isMonstreSurBloc(x, y)) {
 						// Il contient un monstre : pas de remplissage
 						return false;
 					} else {
-						// Il n'en contient pas, on le met de type "trace" (temporaire)
-						terrain.setBloc(TypeBloc.Trace, x, y);
+						// Il n'en contient pas, on le met de type "TmpRempli" (temporaire)
+						terrain.setBloc(TypeBloc.TmpRempli, x, y);
 					}
 					// Bloc au dessus
-					if(terrain.getBloc(x, y + 1) == TypeBloc.Vide) {
+					if(terrain.getBloc(x, y + 1).isVide()) {
 						if(isMonstreSurBloc(x, y + 1)) {
 							// Il contient un monstre : pas de remplissage
 							return false;
 						}
-						// On garde ce bloc dans la pile : à traiter par la suite
+						// On garde ce bloc dans la pile : ï¿½ traiter par la suite
 						tmpCase = new int[2];
 						tmpCase[0] = x;
 						tmpCase[1] = y + 1;
 						pile.add(tmpCase);
 					}
 					// Bloc en dessous
-					if(terrain.getBloc(x, y - 1) == TypeBloc.Vide) {
+					if(terrain.getBloc(x, y - 1).isVide()) {
 						if(isMonstreSurBloc(x, y - 1)) {
 							// Il contient un monstre : pas de remplissage
 							return false;
 						}
-						// On garde ce bloc dans la pile : à traiter par la suite
+						// On garde ce bloc dans la pile : ï¿½ traiter par la suite
 						tmpCase = new int[2];
 						tmpCase[0] = x;
 						tmpCase[1] = y - 1;
@@ -172,14 +179,14 @@ public class Niveau {
 				
 			}
 		}
-		// L'algo est arrivé jusqu'ici : la zone n'avait pas de monstre et doit donc etre remplie
+		// L'algo est arrivï¿½ jusqu'ici : la zone n'avait pas de monstre et doit donc etre remplie
 		return true;
 	}
 	
-	// Vérifie la présence d'un monstre sur un bloc
+	// Vï¿½rifie la prï¿½sence d'un monstre sur un bloc
 	private boolean isMonstreSurBloc(int x, int y) {
 		int i = 0;
-		// Vérifie pour tous les monstres
+		// Vï¿½rifie pour tous les monstres
 		for(i = 0; i < monstres.size(); i++) {
 			if(monstres.get(i).estDansBloc(x, y)) {
 				return true;

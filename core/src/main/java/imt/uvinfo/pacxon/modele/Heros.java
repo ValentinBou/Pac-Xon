@@ -1,7 +1,12 @@
 package imt.uvinfo.pacxon.modele;
 
+import java.util.ArrayDeque;
+
 public class Heros extends Personnage {
 	private boolean isTracing = false;
+	// Pile des coordonnées des blocs tracés
+	private ArrayDeque<int[]> pileTrace = new ArrayDeque<int[]>();
+	
 	// Position de départ
 	private int coordonneeSpawnX = 0;
 	private int coordonneeSpawnY = -1;
@@ -230,11 +235,15 @@ public class Heros extends Personnage {
 				if (blocPrecedent == TypeBloc.Vide) {
 					// Remplit le bloc précédent en "Trace"
 					terrain.setBloc(TypeBloc.Trace, precedentX, precedentY);
+					// Empile le bloc tracé
+					int tmpCoords[] = {terrain.getXint(precedentX), terrain.getYint(precedentY)};
+					pileTrace.add(tmpCoords);
 				}
 				
 				if((blocActuel == TypeBloc.BlocNormal) || (blocActuel == TypeBloc.Bordure)) {
 					// Il atteint un bloc rempli : il remplit le terrain et désactive son mode tracage
-					jeu.getNiveauActuel().remplirTracage(terrain.getXint(precedentX), terrain.getYint(precedentY));
+					jeu.getNiveauActuel().remplirTracage(pileTrace);
+					pileTrace.clear();
 					this.isTracing = false;
 				}
 				

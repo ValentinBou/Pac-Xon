@@ -15,8 +15,8 @@ public class Terrain {
 		largeur = x;
 		hauteur = y;
 		
-		/* Génération des blocs */
-		/* TODO : Possibilité d'utiliser une "map" (un fichier de conf) */
+		/* Gï¿½nï¿½ration des blocs */
+		/* TODO : Possibilitï¿½ d'utiliser une "map" (un fichier de conf) */
 		for(i = 0; i < largeur; i++) {
 			for(j = 0; j < hauteur; j++) {
 				if((i == 0) || (j == 0) || (i == (largeur - 1)) || (j == (hauteur-1))) {
@@ -41,13 +41,41 @@ public class Terrain {
 		}
 	}
 	
-	// Remplace tous les blocs "Tracage" par des "Vide"
-	protected void remplacerTracageParVide() {
+	// Remplace tous les blocs "TmpRempli" par des "TmpRempliValide"
+	protected void validerRemplissage() {
 		int i, j;
 		
 		for(i = 0; i < largeur; i++) {
 			for(j = 0; j < hauteur; j++) {
-				if(blocs[i][j] == TypeBloc.Trace || blocs[i][j] == TypeBloc.TraceTouche) {
+				if(blocs[i][j] == TypeBloc.TmpRempli) {
+					blocs[i][j] = TypeBloc.TmpRempliValide;
+				}
+			}
+		}
+	}
+	
+	// Remplace tous les blocs "TmpRempli" par des "TmpRempliAnnule"
+	protected void annulerRemplissage() {
+		int i, j;
+		
+		for(i = 0; i < largeur; i++) {
+			for(j = 0; j < hauteur; j++) {
+				if(blocs[i][j] == TypeBloc.TmpRempli) {
+					blocs[i][j] = TypeBloc.TmpRempliAnnule;
+				}
+			}
+		}
+	}
+	
+	// Remplace les blocs validÃ©s par des blocs normaux et les blocs annulÃ©s par du vide
+	protected void finaliserRemplissage() {
+		int i, j;
+		
+		for(i = 0; i < largeur; i++) {
+			for(j = 0; j < hauteur; j++) {
+				if(blocs[i][j] == TypeBloc.TmpRempliValide) {
+					blocs[i][j] = TypeBloc.BlocNormal;
+				} else if(blocs[i][j] == TypeBloc.TmpRempliAnnule) {
 					blocs[i][j] = TypeBloc.Vide;
 				}
 			}
@@ -62,17 +90,17 @@ public class Terrain {
 		return hauteur;
 	}
 	
-	// Donne la coordonnée du terrain entière correspondante à la coordonnée flottante
+	// Donne la coordonnï¿½e du terrain entiï¿½re correspondante ï¿½ la coordonnï¿½e flottante
 	public int getXint(double Xdouble) {
 		return (int)Math.floor(Xdouble * largeur);
 	}
 	
-	// Donne la coordonnée du terrain entière correspondante à la coordonnée flottante
+	// Donne la coordonnï¿½e du terrain entiï¿½re correspondante ï¿½ la coordonnï¿½e flottante
 	public int getYint(double Ydouble) {
 		return (int)Math.floor(Ydouble * hauteur);
 	}
 	
-	// Récupération d'un bloc, bloque aux limites du terrain
+	// Rï¿½cupï¿½ration d'un bloc, bloque aux limites du terrain
 	public TypeBloc getBloc(int x, int y) {
 		if(x < 0) {
 			x = 0;
@@ -107,7 +135,7 @@ public class Terrain {
 			y = hauteur - 1;
 		}
 		
-		if(blocs[x][y] != TypeBloc.Bordure) { // TODO : Possibilité de vérifier que le nouveau bloc est aussi autre qu'une bordure, mais moins grave
+		if(blocs[x][y] != TypeBloc.Bordure) { // TODO : Possibilitï¿½ de vï¿½rifier que le nouveau bloc est aussi autre qu'une bordure, mais moins grave
 			blocs[x][y] = nouveauBloc;
 		}
 	}
