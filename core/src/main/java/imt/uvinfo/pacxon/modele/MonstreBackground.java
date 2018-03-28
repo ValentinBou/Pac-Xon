@@ -1,5 +1,7 @@
 package imt.uvinfo.pacxon.modele;
 
+import java.util.Random;
+
 //import java.util.Random;
 
 public class MonstreBackground extends Personnage {
@@ -37,13 +39,10 @@ public class MonstreBackground extends Personnage {
 		int largeurNiveau = terrain.getLargeur();
 		int hauteurNiveau = terrain.getHauteur();
 		
-		// Position aléatoire à l'intérieur des bordures (bordures exclues)
-		// Random rand = new Random();
-		int coordonneeSpawnX = 5;
+		// Position aléatoire à l'intérieur de la bordure du bas
+		Random rand = new Random();
+		int coordonneeSpawnX = rand.nextInt(largeurNiveau - 2) + 1;
 		int coordonneeSpawnY = 0;
-		
-		//posX = coordonneeSpawnX;
-		//posY = coordonneeSpawnY;
 		
 		posX = (double) ((coordonneeSpawnX + largeurNiveau) % largeurNiveau) / largeurNiveau;
 		posY = (double) ((coordonneeSpawnY + hauteurNiveau) % hauteurNiveau) / hauteurNiveau;

@@ -34,6 +34,8 @@ public class Jeu {
 		
 		monstres.add(new MonstreNormal(this));
 		monstres.add(new MonstreBackground(this));
+		monstres.add(new MonstreBackground(this));
+		monstres.add(new MonstreBackground(this));
 		listeNiveaux.add(new Niveau(this, 1, defX, defY, new Heros(this), monstres, defPourcentObjectif));
 		monstres.clear();
 		monstres.add(new MonstreNormal(this));
