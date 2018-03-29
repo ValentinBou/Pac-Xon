@@ -32,6 +32,8 @@ public class PacXon implements ApplicationListener {
     
     private TextureAtlas textures;
 
+    boolean pause = false;
+    
     // Taille fen�tre
     int largeurFenetre = 800;
     int hauteurFenetre = 600;
@@ -64,12 +66,14 @@ public class PacXon implements ApplicationListener {
     	dernierSpriteHeros = "Textures_64px_heros_right";
     	
     }
-
+    
     @Override
     public void render() {
     	
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
 
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) pause();
+        
         // Temps pass� total
         elapsed += Gdx.graphics.getDeltaTime();
         
@@ -121,7 +125,7 @@ public class PacXon implements ApplicationListener {
 	        } else {
 	        	heros.unSetFlagArrowDown();
 	        }
-	
+	        
 	        int i = 0;
 	        int j = 0;
 	        int totalLargeur = niveauActuel.getTerrain().getLargeur();
@@ -157,10 +161,8 @@ public class PacXon implements ApplicationListener {
 	        		} else {
 	        			// Bloc inconnu
 	        			sprites.draw(textures.findRegion("Textures_64px_none"), i*unitLargeur, j*unitHauteur, unitLargeur, unitHauteur);
-	        		}
-	        		
+	        		}	        		
 	        	}
-	        	
 	        }
 	        
 	        // Affichage du h�ros selon sa direction
@@ -195,8 +197,10 @@ public class PacXon implements ApplicationListener {
 	        /* On met � jour le niveau, la m�j s'affichera � la frame suivante */
 	        /* La mise � jour ne se fait pas si le temps est trop grand, pour �viter des erreurs (ici 0.5 seconde : 2fps minimum) */
 	        /* TODO : Possibilit� de cr�er un thread qui mettra � jour lui-m�me l'affichage, pour �viter des probl�mes lorsqu'il n'y a pas de render */
-	        if(Gdx.graphics.getDeltaTime() <= 0.5) {
-	        	monJeu.update(Gdx.graphics.getDeltaTime());
+	        if(pause == false) { 
+	        	if(Gdx.graphics.getDeltaTime() <= 0.5) {
+	        		monJeu.update(Gdx.graphics.getDeltaTime());
+	        	}
 	        }
         }
         
@@ -209,6 +213,13 @@ public class PacXon implements ApplicationListener {
 
     @Override
     public void pause() {
+    	if( pause == true ) {
+    		System.out.println("Replay");
+    		pause = false;
+    	} else {
+    		System.out.println("Pause");
+    		pause = true;
+    	}
     }
 
     @Override
