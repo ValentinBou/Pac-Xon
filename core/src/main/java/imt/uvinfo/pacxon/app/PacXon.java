@@ -228,14 +228,16 @@ public class PacXon implements ApplicationListener {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
-    }
+    }
+    
     public void pauseSpace() {
     	if( pause == true ) pause = false;
     	else pause = true;
     }
      
     @Override
-    public void pause() {    	pause =true;
+    public void pause() {
+    	pause =true;
     }
 
     @Override
