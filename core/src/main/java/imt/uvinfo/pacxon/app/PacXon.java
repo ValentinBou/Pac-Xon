@@ -203,8 +203,6 @@ public class PacXon implements ApplicationListener {
         	String s_Life = "Life : "+Integer.toString(this.monJeu.getNbViesRestantes());
         	policeNormale.draw(sprites, s_Life, largeurFenetre/2, hauteurFenetre-hauteurFenetre/30);
         		// PourcentRempli
-        	//double Pourcent = Math.round(this.monJeu.getNiveauActuel().getTerrain().getPourcentRemplissage()*100);
-        	//Pourcent = Math.round(Pourcent*100);
         	String s_Pourcent = "Objectif : "+Double.toString(Math.round(this.monJeu.getNiveauActuel().getTerrain().getPourcentRemplissage()*100))+"%";
         	policeNormale.draw(sprites, s_Pourcent, largeurFenetre-largeurFenetre/5, hauteurFenetre-hauteurFenetre/30);
         	sprites.end();
