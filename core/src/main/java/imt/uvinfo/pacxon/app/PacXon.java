@@ -72,7 +72,9 @@ public class PacXon implements ApplicationListener {
     	
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
 
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) pause();
+        //if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) pause();
+        //if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) pause();
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) pause();
         
         // Temps pass� total
         elapsed += Gdx.graphics.getDeltaTime();
@@ -201,6 +203,11 @@ public class PacXon implements ApplicationListener {
 	        	if(Gdx.graphics.getDeltaTime() <= 0.5) {
 	        		monJeu.update(Gdx.graphics.getDeltaTime());
 	        	}
+	        } else {
+	       	    policeNormale.setColor(Color.BLACK);
+	        	sprites.begin();
+	        	policeNormale.draw(sprites, "pause", largeurFenetre/2, hauteurFenetre/2);
+	        	sprites.end();
 	        }
         }
         
@@ -213,13 +220,8 @@ public class PacXon implements ApplicationListener {
 
     @Override
     public void pause() {
-    	if( pause == true ) {
-    		System.out.println("Replay");
-    		pause = false;
-    	} else {
-    		System.out.println("Pause");
-    		pause = true;
-    	}
+    	if( pause == true ) pause = false;
+    	else pause = true;
     }
 
     @Override
