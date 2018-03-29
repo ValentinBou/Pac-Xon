@@ -5,14 +5,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL30;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
+//import com.badlogic.gdx.graphics.Texture;
+//import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
+//import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.utils.Array;
+//import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -72,7 +72,7 @@ public class PacXon implements ApplicationListener {
     	
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
 
-        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) pause();
+        if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) pauseSpace();
         
         // Temps pass� total
         elapsed += Gdx.graphics.getDeltaTime();
@@ -88,13 +88,13 @@ public class PacXon implements ApplicationListener {
         	if(monJeu.isFini()) {
         		policeNormale.draw(sprites, "You won!", largeurFenetre/2, hauteurFenetre/2);
         	} else if(monJeu.isPerdu()) {
-        		policeNormale.draw(sprites, "You died :'(", largeurFenetre/2, hauteurFenetre/2);
+        		policeNormale.draw(sprites, "You died :'( ", largeurFenetre/2, hauteurFenetre/2);
         	}
             sprites.end();
         	
         } else {
         	// Affichage du jeu
-        	
+
 	        // R�cup�re le niveau
 	        Niveau niveauActuel = monJeu.getNiveauActuel();
 	        
@@ -191,9 +191,8 @@ public class PacXon implements ApplicationListener {
 	            	sprites.draw(textures.findRegion("Textures_64px_"+niveauActuel.getMonstre(i).iconeName+"_right"), (int)(niveauActuel.getMonstre(i).getPosX()*largeurFenetre), (int)(niveauActuel.getMonstre(i).getPosY()*hauteurFenetre), niveauActuel.getMonstre(i).getLargeur()*unitLargeur, niveauActuel.getMonstre(i).getHauteur()*unitHauteur);
 	        	}
 	        }
-	
 	        sprites.end();
-	        
+	                
 	        /* On met � jour le niveau, la m�j s'affichera � la frame suivante */
 	        /* La mise � jour ne se fait pas si le temps est trop grand, pour �viter des erreurs (ici 0.5 seconde : 2fps minimum) */
 	        /* TODO : Possibilit� de cr�er un thread qui mettra � jour lui-m�me l'affichage, pour �viter des probl�mes lorsqu'il n'y a pas de render */
@@ -208,7 +207,6 @@ public class PacXon implements ApplicationListener {
 	        	sprites.end();
 	        }
         }
-        
     }
 
     @Override
@@ -216,14 +214,19 @@ public class PacXon implements ApplicationListener {
         viewport.update(width, height, true);
     }
 
-    @Override
-    public void pause() {
+    public void pauseSpace() {
     	if( pause == true ) pause = false;
     	else pause = true;
+    }
+    
+    @Override
+    public void pause() {
+    	pause = true;
     }
 
     @Override
     public void resume() {
+    	pause = false;
     }
 
     @Override
