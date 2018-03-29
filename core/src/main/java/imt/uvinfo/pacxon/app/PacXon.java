@@ -192,6 +192,22 @@ public class PacXon implements ApplicationListener {
 	        	}
 	        }
 	        sprites.end();
+	        
+		      //Affichage bare d'état
+        	policeNormale.setColor(Color.RED);
+        	sprites.begin();
+        		// Score
+        	String s_Score = "Score : "+Integer.toString(this.monJeu.getScore());
+        	policeNormale.draw(sprites, s_Score, largeurFenetre/5, hauteurFenetre-hauteurFenetre/30);
+        		// Life
+        	String s_Life = "Life : "+Integer.toString(this.monJeu.getNbViesRestantes());
+        	policeNormale.draw(sprites, s_Life, largeurFenetre/2, hauteurFenetre-hauteurFenetre/30);
+        		// PourcentRempli
+        	//double Pourcent = Math.round(this.monJeu.getNiveauActuel().getTerrain().getPourcentRemplissage()*100);
+        	//Pourcent = Math.round(Pourcent*100);
+        	String s_Pourcent = "Objectif : "+Double.toString(Math.round(this.monJeu.getNiveauActuel().getTerrain().getPourcentRemplissage()*100))+"%";
+        	policeNormale.draw(sprites, s_Pourcent, largeurFenetre-largeurFenetre/5, hauteurFenetre-hauteurFenetre/30);
+        	sprites.end();
 	                
 	        /* On met � jour le niveau, la m�j s'affichera � la frame suivante */
 	        /* La mise � jour ne se fait pas si le temps est trop grand, pour �viter des erreurs (ici 0.5 seconde : 2fps minimum) */
@@ -212,16 +228,14 @@ public class PacXon implements ApplicationListener {
     @Override
     public void resize(int width, int height) {
         viewport.update(width, height, true);
-    }
-
+    }
     public void pauseSpace() {
     	if( pause == true ) pause = false;
     	else pause = true;
     }
-    
+     
     @Override
-    public void pause() {
-    	pause = true;
+    public void pause() {    	pause =true;
     }
 
     @Override
