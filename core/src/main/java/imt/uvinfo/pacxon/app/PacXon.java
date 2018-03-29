@@ -72,8 +72,6 @@ public class PacXon implements ApplicationListener {
     	
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) Gdx.app.exit();
 
-        //if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) pause();
-        //if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) pause();
         if(Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) pause();
         
         // Temps pass� total
