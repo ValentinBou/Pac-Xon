@@ -34,8 +34,6 @@ public class Jeu {
 		
 		monstres.add(new MonstreNormal(this));
 		monstres.add(new MonstreBackground(this));
-		monstres.add(new MonstreBackground(this));
-		monstres.add(new MonstreBackground(this));
 		listeNiveaux.add(new Niveau(this, 1, defX, defY, new Heros(this), monstres, defPourcentObjectif));
 		monstres.clear();
 		monstres.add(new MonstreNormal(this));
@@ -104,6 +102,10 @@ public class Jeu {
 
 	public Niveau getNiveauActuel() {
 		return listeNiveaux.get(curseurNiveauActuel);
+	}
+	
+	public int getNiveauInt() {
+		return curseurNiveauActuel+1;
 	}
 	
 	public void passerNiveau() {

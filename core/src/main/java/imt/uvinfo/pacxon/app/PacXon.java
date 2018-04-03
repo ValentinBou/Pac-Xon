@@ -197,13 +197,13 @@ public class PacXon implements ApplicationListener {
         	policeNormale.setColor(Color.RED);
         	sprites.begin();
         		// Score
-        	String s_Score = "Score : "+Integer.toString(this.monJeu.getScore());
+        	String s_Score = "Niveau : "+monJeu.getNiveauInt();
         	policeNormale.draw(sprites, s_Score, largeurFenetre/5, hauteurFenetre-hauteurFenetre/30);
         		// Life
-        	String s_Life = "Life : "+Integer.toString(this.monJeu.getNbViesRestantes());
+        	String s_Life = "Life : "+monJeu.getNbViesRestantes();
         	policeNormale.draw(sprites, s_Life, largeurFenetre/2, hauteurFenetre-hauteurFenetre/30);
         		// PourcentRempli
-        	String s_Pourcent = "Objectif : "+Double.toString(Math.round(this.monJeu.getNiveauActuel().getTerrain().getPourcentRemplissage()*100))+"%";
+        	String s_Pourcent = "Objectif : "+(int)(monJeu.getNiveauActuel().getTerrain().getPourcentRemplissage()*100)+"%";
         	policeNormale.draw(sprites, s_Pourcent, largeurFenetre-largeurFenetre/5, hauteurFenetre-hauteurFenetre/30);
         	sprites.end();
 	                
