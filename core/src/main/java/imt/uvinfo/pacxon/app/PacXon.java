@@ -86,8 +86,10 @@ public class PacXon implements ApplicationListener {
         	// TODO : Centrer le texte, et pourquoi pas créer sa police avec classe police, images pour chaque lettre, getstring etc...
         	sprites.begin();
         	if(monJeu.isFini()) {
+        		policeNormale.setColor(Color.WHITE);
         		policeNormale.draw(sprites, "You won!", largeurFenetre/2, hauteurFenetre/2);
         	} else if(monJeu.isPerdu()) {
+        		policeNormale.setColor(Color.RED);
         		policeNormale.draw(sprites, "You died :'( ", largeurFenetre/2, hauteurFenetre/2);
         	}
             sprites.end();
@@ -203,15 +205,15 @@ public class PacXon implements ApplicationListener {
         	String s_Life = "Life : "+monJeu.getNbViesRestantes();
         	policeNormale.draw(sprites, s_Life, largeurFenetre/2, hauteurFenetre-hauteurFenetre/30);
         		// PourcentRempli
-        	String s_Pourcent = "Objectif : "+(int)(monJeu.getNiveauActuel().getTerrain().getPourcentRemplissage()*100)+"%";
+        	String s_Pourcent = "Objectif : "+(int)(monJeu.getNiveauActuel().getTerrain().getPourcentRemplissage()*100)+" / 80%";
         	policeNormale.draw(sprites, s_Pourcent, largeurFenetre-largeurFenetre/5, hauteurFenetre-hauteurFenetre/30);
         	sprites.end();
 	                
 	        /* On met � jour le niveau, la m�j s'affichera � la frame suivante */
-	        /* La mise � jour ne se fait pas si le temps est trop grand, pour �viter des erreurs (ici 0.5 seconde : 2fps minimum) */
+	        /* La mise � jour ne se fait pas si le temps est trop grand, pour �viter des erreurs (ici 0.1 seconde : 10fps minimum) */
 	        /* TODO : Possibilit� de cr�er un thread qui mettra � jour lui-m�me l'affichage, pour �viter des probl�mes lorsqu'il n'y a pas de render */
 	        if(pause == false) { 
-	        	if(Gdx.graphics.getDeltaTime() <= 0.5) {
+	        	if(Gdx.graphics.getDeltaTime() <= 0.1) {
 	        		monJeu.update(Gdx.graphics.getDeltaTime());
 	        	}
 	        } else {

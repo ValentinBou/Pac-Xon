@@ -122,9 +122,10 @@ public class Niveau {
 		int x, y;
 		
 		// Le bloc de d�part contient un monstre ou n'est pas vide : pas de remplissage
-		if(isMonstreSurBloc(xDepart, yDepart)) {
+		if(terrain.getBloc(xDepart, yDepart) != TypeBloc.Vide) {
 			return false;
-		} else if(terrain.getBloc(xDepart, yDepart) != TypeBloc.Vide) {
+		}
+		if(isMonstreSurBloc(xDepart, yDepart)) {
 			return false;
 		}
 		
