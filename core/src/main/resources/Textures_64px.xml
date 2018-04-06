@@ -1,0 +1,17 @@
+<TextureAtlas imagePath="Textures_64px.png">
+	<SubTexture name="Textures_64px_bordure.png" x="0" y="0" width="64" height="64"/>
+	<SubTexture name="Textures_64px_blocnormal.png" x="64" y="0" width="64" height="64"/>
+	<SubTexture name="Textures_64px_vide.png" x="128" y="0" width="64" height="64"/>
+	<SubTexture name="Textures_64px_none.png" x="192" y="0" width="64" height="64"/>
+	<SubTexture name="Textures_64px_trace.png" x="0" y="64" width="64" height="64"/>
+	<SubTexture name="Textures_64px_tracetouche.png" x="64" y="64" width="64" height="64"/>
+	<SubTexture name="Textures_64px_heros_right.png" x="0" y="128" width="64" height="64"/>
+	<SubTexture name="Textures_64px_heros_left.png" x="64" y="128" width="64" height="64"/>
+	<SubTexture name="Textures_64px_heros_up.png" x="128" y="128" width="64" height="64"/>
+	<SubTexture name="Textures_64px_heros_down.png" x="192" y="128" width="64" height="64"/>
+	<SubTexture name="Textures_64px_monstrenormal_right.png" x="0" y="192" width="64" height="64"></SubTexture>
+	<SubTexture name="Textures_64px_monstrenormal_left.png" x="64" y="192" width="64" height="64"/><SubTexture
+		name="Textures_64px_monstrebackground_right.png" x="128" y="192" width="64" height="64">
+</SubTexture>
+	<SubTexture name="Textures_64px_monstrebackground_left.png" x="192" y="192" width="64" height="64"></SubTexture>
+</TextureAtlas>
